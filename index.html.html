@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title-tag">Canada PNP Tool</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a3f6f;--red:#c0392b;--blue:#1a5fa8;--green:#276221;
+  --amber:#92560a;--bg:#f4f4f0;--white:#fff;--border:#ddddd5;
+  --text:#1a1a1a;--muted:#666;--light:#f8f8f5;--teal:#0d6e6e;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;color:var(--text);background:var(--bg);line-height:1.5}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.nav{background:var(--white);border-bottom:1.5px solid var(--border);padding:0 16px;display:flex;align-items:center;position:sticky;top:0;z-index:300;flex-wrap:wrap;min-height:48px}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:12px;flex-shrink:0}
+.nav-brand-text{font-size:13px;font-weight:800;color:var(--navy);letter-spacing:-.3px;white-space:nowrap;cursor:pointer;border-radius:4px;padding:4px 6px;transition:background .12s}
+.nav-brand-text:hover{background:#fff3e0}
+.nav-brand-text[contenteditable=true]{outline:2px solid var(--amber);background:#fffde7}
+.nav-tabs{display:flex;flex:1;overflow-x:auto;gap:0}
+.nav-tab{padding:12px 11px;font-size:12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .12s;user-select:none;flex-shrink:0}
+.nav-tab:hover{color:var(--text);background:var(--light)}
+.nav-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.nav-tab .tlbl[contenteditable=true]{outline:2px solid var(--amber);background:#fffde7;border-radius:3px;cursor:text;padding:1px 3px}
+.nav-right{display:flex;align-items:center;gap:7px;padding:6px 0;flex-shrink:0;margin-left:8px}
+.etoggle{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);transition:all .12s;user-select:none}
+.etoggle:hover,.etoggle.on{border-color:var(--amber);color:var(--amber);background:#fff8e1}
+.edot{width:7px;height:7px;border-radius:50%;background:#ccc;transition:background .12s}
+.etoggle.on .edot{background:var(--amber)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid;transition:all .12s;font-family:inherit;white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}.btn-primary:hover{background:#0f2a4a}
+.btn-blue{background:var(--blue);color:#fff;border-color:var(--blue)}.btn-blue:hover{background:#134d8a}
+.btn-sec{background:var(--white);color:var(--text);border-color:#bbb}.btn-sec:hover{background:var(--bg)}
+.btn-success{background:var(--green);color:#fff;border-color:var(--green)}.btn-success:hover{background:#1c511a}
+.btn-danger{background:#fff;color:var(--red);border-color:#f5b7b1}.btn-danger:hover{background:#fce8e6}
+.btn-amber{background:#fff8e1;color:var(--amber);border-color:#f59e0b}.btn-amber:hover{background:#fff3c4}
+.btn-purple{background:#ede7f6;color:#5c35aa;border-color:#c5b8ec}.btn-purple:hover{background:#e1d5f5}
+.btn-sm{padding:3px 8px;font-size:11px}
+.edit-banner{background:#fff8e1;border-bottom:2px solid var(--amber);padding:5px 18px;display:none;align-items:center;gap:12px;font-size:12px;font-weight:600;color:var(--amber)}
+.edit-banner.on{display:flex}
+.view{display:none;padding:18px 16px;max-width:1380px;margin:0 auto}
+.view.active{display:block}
+.ph{margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.ph h2{font-size:18px;font-weight:700;color:var(--navy);cursor:pointer;border-radius:4px;padding:2px 5px;transition:background .12s}
+.ph h2:hover{background:#fff3e0}
+.ph h2[contenteditable=true]{outline:2px solid var(--amber);background:#fffde7}
+.ph p{font-size:12px;color:var(--muted);margin-top:3px;cursor:pointer;border-radius:3px;padding:1px 4px}
+.ph p:hover{background:#fff3e0}
+.ph p[contenteditable=true]{outline:2px solid var(--amber);background:#fffde7}
+.card{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:18px 20px;margin-bottom:12px}
+.card-sm{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:11px 14px;margin-bottom:8px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.metric{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 15px;position:relative}
+.metric-lbl{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;cursor:pointer}
+.metric-lbl:hover{color:var(--amber)}
+.metric-lbl[contenteditable=true]{outline:1px solid var(--amber);background:#fffde7;border-radius:2px}
+.metric-val{font-size:22px;font-weight:700}
+.metric-del{position:absolute;top:6px;right:8px;display:none;font-size:10px;cursor:pointer;color:var(--red);font-weight:700}
+.metric:hover .metric-del.edshow{display:block}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:12px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-blue{background:#e8f0fc;color:#1a5fa8}.b-green{background:#e6f4ea;color:#276221}
+.b-amber{background:#fef3e2;color:#8a4900}.b-red{background:#fce8e6;color:#c0392b}
+.b-gray{background:#f1f1ec;color:#555}.b-purple{background:#ede7f6;color:#5c35aa}
+.b-teal{background:#e0f7f4;color:#00695c}
+.twrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--bg);padding:8px 11px;text-align:left;font-weight:700;color:#444;border-bottom:1px solid var(--border);white-space:nowrap;font-size:11px;position:relative;letter-spacing:.2px}
+th.eh{cursor:pointer}
+th.eh:hover{background:#fff3e0}
+th.eh[contenteditable=true]{background:#fffde7;outline:2px solid var(--amber);outline-offset:-2px;cursor:text;white-space:normal;min-width:80px}
+td{padding:8px 11px;border-bottom:1px solid #f0f0ea;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafaf7}
+.em tr:hover td{background:#fffbf0;cursor:pointer}
+td.ce{padding:0}
+td.ce input,td.ce select,td.ce textarea{border:none;background:#fffde7;padding:7px 10px;font-size:12px;width:100%;min-width:100px;outline:2px solid var(--amber);outline-offset:-2px;font-family:inherit}
+td.ce textarea{min-height:64px;resize:vertical}
+.rbtns{display:flex;gap:3px;opacity:0;transition:opacity .12s}
+tr:hover .rbtns{opacity:1}
+.rb{padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid}
+.rb-e{background:#e8f0fc;color:#1a5fa8;border-color:#b5d4f4}
+.rb-d{background:#fce8e6;color:#c0392b;border-color:#f5b7b1}
+.rb-c{background:#e6f4ea;color:#276221;border-color:#a8d5b5}
+.sbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.sbar input,.sbar select{padding:7px 10px;border:1px solid #ccc;border-radius:6px;font-size:12px;font-family:inherit}
+.sbar input{max-width:240px}
+.sbar input:focus,.sbar select:focus{outline:none;border-color:var(--blue)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.3px}
+.fg input,.fg select,.fg textarea{padding:8px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 2px rgba(26,95,168,.1)}
+.fg textarea{resize:vertical;min-height:68px}
+hr.d{border:none;border-top:1px solid #eee;margin:14px 0}
+.sec-ttl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#888;margin:14px 0 10px}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:500;overflow-y:auto;padding:24px 12px;align-items:flex-start;justify-content:center}
+.mbg.open{display:flex}
+.mc{background:var(--white);border-radius:12px;width:100%;max-width:820px;margin:auto;padding:24px 26px;position:relative;max-height:90vh;overflow-y:auto}
+.mc-sm{max-width:480px}
+.mclose{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:#aaa;width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:var(--bg)}
+.mc h2{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:14px}
+.inf{background:#e8f0fc;border-left:3px solid var(--blue);border-radius:0 6px 6px 0;padding:8px 13px;font-size:12px;color:#1a3f6f;margin-bottom:12px}
+.wrn{background:#fef3e2;border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;padding:8px 13px;font-size:12px;color:var(--amber);margin-bottom:12px}
+.suc{background:#e6f4ea;border-left:3px solid var(--green);border-radius:0 6px 6px 0;padding:8px 13px;font-size:12px;color:#1a4a1e;margin-bottom:12px}
+.live-banner{background:#e8f0fc;border:1px solid #b5d4f4;border-radius:8px;padding:10px 14px;font-size:12px;color:#1a3f6f;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#27ae60;flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.savebar{position:fixed;bottom:0;left:0;right:0;background:var(--navy);color:#fff;padding:9px 18px;display:none;align-items:center;justify-content:space-between;z-index:400;font-size:13px}
+.savebar.on{display:flex}
+.rc{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:13px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .12s}
+.rc:hover{border-color:var(--blue)}
+.sbar2{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:7px}
+.sf{height:100%;border-radius:3px}
+.gl{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.gt{background:#fef3e2;color:var(--amber);font-size:10px;padding:2px 6px;border-radius:3px}
+.mt{background:#e6f4ea;color:var(--green);font-size:10px;padding:2px 6px;border-radius:3px}
+.cc{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:13px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .12s}
+.cc:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.cav{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.tabg{display:flex;border-bottom:1px solid var(--border);margin-bottom:14px;flex-wrap:wrap}
+.tabb{padding:7px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:#888;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
+.tabb.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tabb:hover{color:var(--text);background:var(--light)}
+.tabp{display:none}.tabp.on{display:block}
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.pc{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 15px;cursor:pointer;transition:border-color .12s}
+.pc:hover{border-color:var(--blue)}
+#toast{position:fixed;bottom:62px;right:18px;background:#1a1a1a;color:#fff;padding:9px 14px;border-radius:8px;font-size:12px;z-index:700;opacity:0;transform:translateY(6px);transition:all .2s;pointer-events:none;max-width:340px}
+#toast.on{opacity:1;transform:translateY(0)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid #ddd;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tbl-section{margin-bottom:24px}
+.tbl-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px;flex-wrap:wrap}
+.tbl-section-title{font-size:15px;font-weight:700;color:var(--navy);cursor:pointer;border-radius:4px;padding:2px 5px}
+.tbl-section-title:hover{background:#fff3e0}
+.tbl-section-title[contenteditable=true]{outline:2px solid var(--amber);background:#fffde7}
+.field-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f5f5f0;font-size:12px}
+.field-row:last-child{border-bottom:none}
+.empty{text-align:center;padding:40px;color:#bbb}
+.upd-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #f0f0ea;font-size:12px}
+.upd-row:last-child{border-bottom:none}
+@media(max-width:640px){.fg2{grid-template-columns:1fr}.nav-tabs{max-width:calc(100vw - 160px)}}
+</style>
+</head>
+<body>
+
+<div class="edit-banner" id="ebanner">
+  ✏️ Edit Mode ON — click any cell, heading, column header, tab label, or metric to edit.
+  <button class="btn btn-sec btn-sm" style="margin-left:auto" onclick="toggleEdit()">Turn Off</button>
+</div>
+
+<nav class="nav" id="main-nav">
+  <div class="nav-brand" onclick="if(editMode)openLogoBrandEditor()">
+    <div id="nav-logo-wrap" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <span id="nav-logo-icon" style="font-size:20px">🍁</span>
+      <img id="nav-logo-img" style="display:none;height:32px;width:auto;border-radius:4px;object-fit:contain">
+      <span class="nav-brand-text" id="nav-brand" data-heading="nav-brand">CANADA PNP</span>
+    </div>
+  </div>
+  <div class="nav-tabs" id="nav-tabs"></div>
+  <div class="nav-right">
+    <div class="etoggle" id="etoggle" onclick="toggleEdit()">
+      <div class="edot" id="edot"></div><span id="elbl">Edit Mode</span>
+    </div>
+    <button class="btn btn-purple btn-sm" onclick="openLiveUpdate()">🔄 Live Update</button>
+    <button class="btn btn-sec btn-sm" onclick="openDataMgr()">💾 Backup</button>
+  </div>
+</nav>
+
+<div id="views-container"></div>
+
+<!-- ═══ PROGRAM DETAIL / EDIT MODAL ═══ -->
+<div class="mbg" id="prog-modal">
+  <div class="mc">
+    <button class="mclose" onclick="closeM('prog-modal')">✕</button>
+    <h2 id="pm-title">Program</h2>
+    <div id="pm-body"></div>
+    <div id="pm-actions" style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"></div>
+  </div>
+</div>
+
+<!-- ═══ CLIENT FORM MODAL ═══ -->
+<div class="mbg" id="client-modal">
+  <div class="mc">
+    <button class="mclose" onclick="closeM('client-modal')">✕</button>
+    <h2 id="cm-title">Client Profile</h2>
+    <div id="client-form-body"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="saveClient()">💾 Save Client</button>
+      <button class="btn btn-success" onclick="saveAndMatch()">💾 Save &amp; Run Match</button>
+      <button class="btn btn-sec"     onclick="closeM('client-modal')">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="del-client-btn" style="display:none;margin-left:auto" onclick="deleteCurrentClient()">🗑 Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD/MANAGE TABLE MODAL ═══ -->
+<div class="mbg" id="table-modal">
+  <div class="mc mc-sm">
+    <button class="mclose" onclick="closeM('table-modal')">✕</button>
+    <h2 id="table-modal-title">Add New Table</h2>
+    <div id="table-modal-body"></div>
+  </div>
+</div>
+
+<!-- ═══ ADD FIELD MODAL ═══ -->
+<div class="mbg" id="field-modal">
+  <div class="mc mc-sm">
+    <button class="mclose" onclick="closeM('field-modal')">✕</button>
+    <h2 id="field-modal-title">Add Field</h2>
+    <div id="field-modal-body"></div>
+  </div>
+</div>
+
+<!-- ═══ COLUMN MANAGER MODAL ═══ -->
+<div class="mbg" id="col-modal">
+  <div class="mc mc-sm">
+    <button class="mclose" onclick="closeM('col-modal')">✕</button>
+    <h2>⚙ Manage Columns</h2>
+    <div class="inf">Show/hide, rename, or add columns. All data is retained even when a column is hidden.</div>
+    <div id="col-list"></div>
+    <hr class="d">
+    <div class="sec-ttl">Add Custom Column to Programs Table</div>
+    <div class="fg2" style="margin-bottom:10px">
+      <div class="fg"><label>Column Label</label><input type="text" id="new-col-lbl" placeholder="e.g. Internal Notes"></div>
+      <div class="fg"><label>Data Type</label>
+        <select id="new-col-type">
+          <option value="text">Short Text</option><option value="textarea">Long Text</option>
+          <option value="number">Number</option><option value="url">URL / Link</option>
+          <option value="checkbox">Yes / No</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-success btn-sm" onclick="addCustomCol()">+ Add Column</button>
+    <button class="btn btn-sec btn-sm" style="margin-left:8px" onclick="closeM('col-modal')">Done</button>
+  </div>
+</div>
+
+<!-- ═══ LIVE UPDATE MODAL ═══ -->
+<div class="mbg" id="live-modal">
+  <div class="mc" style="max-width:620px">
+    <button class="mclose" onclick="closeM('live-modal')">✕</button>
+    <h2>🔄 Live Program Update Check</h2>
+
+    <!-- Step 1: API Key -->
+    <div id="live-apikey-section">
+      <div style="background:#e8f0fc;border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:13px;line-height:1.7">
+        <strong>How this works:</strong> This feature uses the Anthropic Claude AI to visit each program's official government website right now and compare it to your saved data, then report any changes.<br><br>
+        <strong>You need a free Anthropic API key.</strong> Get one at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → Sign up → API Keys → Create Key. New accounts include free credits.
+      </div>
+      <div class="fg" style="margin-bottom:8px">
+        <label>Your Anthropic API Key</label>
+        <div style="display:flex;gap:8px">
+          <input type="password" id="api-key-input" placeholder="sk-ant-api03-…" style="flex:1;padding:8px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:13px;font-family:monospace">
+          <button class="btn btn-sec btn-sm" onclick="toggleApiKeyVisibility()">👁</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Your key is stored only in this browser session and never sent anywhere except directly to Anthropic's API.</div>
+      </div>
+      <button class="btn btn-success btn-sm" onclick="saveApiKey()" style="margin-bottom:4px">✓ Save Key &amp; Continue</button>
+      <div id="apikey-status" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+    </div>
+
+    <!-- Step 2: Run checks (shown after key saved) -->
+    <div id="live-check-section" style="display:none">
+      <div class="suc" style="margin-bottom:12px">✅ API key saved for this session. You can now run live checks.</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-sec btn-sm" onclick="document.getElementById('live-check-section').style.display='none';document.getElementById('live-apikey-section').style.display='block'">🔑 Change Key</button>
+      </div>
+      <div class="fg" style="margin-bottom:12px">
+        <label>Select Program to Check</label>
+        <select id="live-prog-select"><option value="">— Select a program —</option></select>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn btn-blue btn-sm" onclick="runLiveCheck()">🔍 Check This Program</button>
+        <button class="btn btn-sec btn-sm" onclick="checkAllPrograms()">🔍 Check All (up to 5 at a time)</button>
+      </div>
+      <div id="live-result" style="display:none;margin-bottom:14px"></div>
+    </div>
+
+    <hr class="d">
+    <div class="sec-ttl">Update History</div>
+    <div id="update-log" style="max-height:180px;overflow-y:auto;font-size:12px;border:1px solid var(--border);border-radius:6px;padding:8px"></div>
+  </div>
+</div>
+
+<!-- ═══ DATA MANAGER MODAL ═══ -->
+<div class="mbg" id="data-modal">
+  <div class="mc mc-sm">
+    <button class="mclose" onclick="closeM('data-modal')">✕</button>
+    <h2>💾 Backup &amp; Settings</h2>
+    <div class="sec-ttl">Page Title</div>
+    <div class="fg" style="margin-bottom:10px">
+      <label>Browser Tab Title</label>
+      <input type="text" id="pg-title-input" placeholder="Canada PNP Tool">
+    </div>
+    <button class="btn btn-blue btn-sm" onclick="savePageTitle()">Update Title</button>
+    <hr class="d">
+    <div class="sec-ttl">Export Data</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" onclick="exportJSON()">⬇ Export JSON (full backup)</button>
+      <button class="btn btn-sec btn-sm"  onclick="exportCSV()">⬇ Export CSV (programs only)</button>
+    </div>
+    <div class="sec-ttl">Import Data</div>
+    <input type="file" id="imp-file" accept=".json" style="font-size:12px;margin-bottom:8px;display:block">
+    <button class="btn btn-sec btn-sm" onclick="importJSON()">⬆ Import from JSON</button>
+    <hr class="d">
+    <div class="sec-ttl" style="color:var(--red)">⚠ Reset</div>
+    <button class="btn btn-danger btn-sm" onclick="confirmReset()">↺ Reset Programs to Defaults</button>
+    <hr class="d">
+    <div id="storage-info" style="font-size:11px;color:var(--muted)"></div>
+  </div>
+</div>
+
+<!-- ═══ DROPDOWN OPTIONS EDITOR ═══ -->
+<div class="mbg" id="opts-modal">
+  <div class="mc mc-sm">
+    <button class="mclose" onclick="closeM('opts-modal')">✕</button>
+    <h2 id="opts-modal-title">Edit Dropdown Options</h2>
+    <div class="inf">Add, edit, or remove options. Drag to reorder. Changes apply immediately to all forms and filters.</div>
+    <div id="opts-list" style="margin-bottom:14px;border:1px solid var(--border);border-radius:8px;overflow:hidden;max-height:320px;overflow-y:auto"></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" id="opts-new-val" placeholder="New option value…" style="flex:1;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:13px">
+      <button class="btn btn-success btn-sm" onclick="addDropdownOption()">+ Add</button>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-primary btn-sm" onclick="saveDropdownOptions()">💾 Save Options</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('opts-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM MODAL ═══ -->
+<div class="mbg" id="conf-modal">
+  <div class="mc mc-sm" style="max-width:380px;text-align:center;padding:26px 24px">
+    <h3 id="conf-title" style="font-size:15px;font-weight:700;margin-bottom:8px"></h3>
+    <p  id="conf-msg"   style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5"></p>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn btn-danger btn-sm" id="conf-ok">Yes, proceed</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('conf-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="savebar" id="savebar">
+  <span>✅ <span id="save-msg">All changes saved</span></span>
+  <button class="btn btn-sec btn-sm" onclick="document.getElementById('savebar').classList.remove('on')">Dismiss</button>
+</div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════
+// APP STATE & STORAGE KEYS
+// ═══════════════════════════════════════════════════════════
+const SK={
+  progs:'cnpnp4_progs',cols:'cnpnp4_cols',clients:'cnpnp4_clients',
+  results:'cnpnp4_results',headings:'cnpnp4_headings',pgtitle:'cnpnp4_pgtitle',
+  tabs:'cnpnp4_tabs',customTables:'cnpnp4_tables',dashFields:'cnpnp4_dashfields',
+  updateLog:'cnpnp4_updatelog',clientFields:'cnpnp4_clientfields',metrics:'cnpnp4_metrics',
+  logo:'cnpnp4_logo',dashbanners:'cnpnp4_dashbanners',
+};
+let PROGS=[], COLS=[], CLIENTS=[], RESULTS=[], CUSTOM_TABLES=[];
+let CLIENT_EXTRA_FIELDS=[], CUSTOM_METRICS=[];
+let TABS=[], HEADINGS={};
+let UPDATE_LOG=[];
+let editMode=false;
+let _editProgId=null, _editClientId=null, _activeTabId=null;
+
+// ─── Education rank for matching ───
+const EDU_RANK={secondary:1,diploma1:2,trade:2,diploma2:3,diploma3:4,bachelor:5,bachelor4:6,master:7,phd:8};
+
+// ─── Base program columns ───
+const BASE_COLS=[
+  {key:'name',lbl:'Program Name',type:'text',show:true,sys:true},
+  {key:'province',lbl:'Province / Territory',type:'select',show:true,sys:true,
+   opts:['British Columbia','Alberta','Saskatchewan','Manitoba','Ontario','Quebec','Nova Scotia','New Brunswick','Prince Edward Island','Newfoundland and Labrador','Northwest Territories','Yukon','Nunavut']},
+  {key:'type',lbl:'Stream Type',type:'select',show:true,sys:true,
+   opts:['Skilled Worker','Entrepreneur / Business','Graduate']},
+  {key:'status',lbl:'Status',type:'select',show:true,sys:false,
+   opts:['Open','Paused','Closed','Intake Limited']},
+  {key:'expressEntry',lbl:'Express Entry Linked',type:'select',show:true,sys:false,
+   opts:['Yes','No']},
+  {key:'clb',lbl:'Min CLB Score',type:'number',show:true,sys:true},
+  {key:'frClb',lbl:'Min NCLC (French)',type:'number',show:false,sys:true},
+  {key:'expYears',lbl:'Min Experience (Years)',type:'number',show:true,sys:true},
+  {key:'teerText',lbl:'Eligible TEER Levels',type:'text',show:true,sys:false},
+  {key:'jobOffer',lbl:'Job Offer Required',type:'select',show:true,sys:false,
+   opts:['Yes','No']},
+  {key:'jobOfferPermanent',lbl:'Job Offer Must Be Permanent',type:'select',show:false,sys:false,
+   opts:['Yes','No']},
+  {key:'jobOfferProvince',lbl:'Job Offer Province',type:'select',show:false,sys:false,
+   opts:['','British Columbia','Alberta','Saskatchewan','Manitoba','Ontario','Quebec','Nova Scotia','New Brunswick','Prince Edward Island','Newfoundland and Labrador','Northwest Territories','Yukon']},
+  {key:'eeRequired',lbl:'EE Profile Required',type:'select',show:false,sys:false,
+   opts:['Yes','No']},
+  {key:'inCanadaRequired',lbl:'Must Be in Canada',type:'select',show:false,sys:false,
+   opts:['Yes','No']},
+  {key:'networthMin',lbl:'Min Net Worth (CAD $)',type:'number',show:false,sys:true},
+  {key:'investMin',lbl:'Min Investment (CAD $)',type:'number',show:false,sys:true},
+  {key:'fundsAmt',lbl:'Min Settlement Funds (CAD $)',type:'number',show:false,sys:false},
+  {key:'fees',lbl:'Application Fees',type:'text',show:true,sys:false},
+  {key:'processing',lbl:'Processing Time',type:'text',show:true,sys:false},
+  {key:'website',lbl:'Official Website URL',type:'url',show:false,sys:false},
+  {key:'description',lbl:'Program Description',type:'textarea',show:false,sys:false},
+  {key:'criteria',lbl:'Eligibility Criteria',type:'textarea',show:false,sys:false},
+  {key:'docs',lbl:'Required Documents',type:'textarea',show:false,sys:false},
+  {key:'notes',lbl:'Notes / Special Conditions',type:'textarea',show:false,sys:false},
+  {key:'lastVerified',lbl:'Last Verified',type:'text',show:true,sys:false},
+];
+
+// ─── Base client fields ───
+const BASE_CLIENT_FIELDS=[
+  {key:'name',lbl:'Full Name',type:'text',required:true,matchKey:null},
+  {key:'date',lbl:'File Date',type:'date',required:false,matchKey:null},
+  {key:'age',lbl:'Age',type:'number',required:false,matchKey:null},
+  {key:'status',lbl:'Client Status',type:'select',required:false,
+   opts:['Active','In Progress','Submitted','Nominated','Archived'],matchKey:null},
+  {key:'edu',lbl:'Highest Education',type:'select',required:false,
+   opts:['— Select —','High School / Secondary','1-Year College Diploma','2-Year College Diploma','3-Year College Diploma','Trade / Apprenticeship','Bachelor Degree','Bachelor Degree (4-Year)','Master Degree','PhD / Doctorate'],matchKey:null},
+  {key:'exp',lbl:'Work Experience (Years)',type:'number',required:false,matchKey:'expYears'},
+  {key:'noc',lbl:'NOC Code (2021)',type:'text',required:false,matchKey:null},
+  {key:'teer',lbl:'TEER Category',type:'select',required:false,
+   opts:['— Select —','TEER 0 — Management','TEER 1 — Professional','TEER 2 — Technical','TEER 3 — Skilled Trades','TEER 4 — Semi-Skilled','TEER 5 — Labour'],matchKey:null},
+  {key:'occ',lbl:'Occupation Title',type:'text',required:false,matchKey:null},
+  {key:'langTest',lbl:'Language Test Taken',type:'select',required:false,
+   opts:['— Select —','IELTS','CELPIP-G','TEF Canada','TCF Canada'],matchKey:null},
+  {key:'clb',lbl:'CLB Score (English)',type:'select',required:false,
+   opts:['Not tested','CLB 3','CLB 4','CLB 5','CLB 6','CLB 7','CLB 8','CLB 9','CLB 10+'],matchKey:null},
+  {key:'frClb',lbl:'French NCLC Score',type:'select',required:false,
+   opts:['Not tested','NCLC 3','NCLC 4','NCLC 5','NCLC 6','NCLC 7','NCLC 8','NCLC 9+'],matchKey:null},
+  {key:'prov',lbl:'Province Preference',type:'select',required:false,
+   opts:['No preference','British Columbia','Alberta','Saskatchewan','Manitoba','Ontario','Quebec','New Brunswick','Nova Scotia','Prince Edward Island','Newfoundland and Labrador','Northwest Territories','Yukon'],matchKey:null},
+  {key:'job',lbl:'Canadian Job Offer',type:'select',required:false,
+   opts:['No job offer','Yes — Full-Time Permanent','Yes — Full-Time Temporary'],matchKey:null},
+  {key:'jprov',lbl:'Job Offer Province',type:'select',required:false,
+   opts:['Not applicable','British Columbia','Alberta','Saskatchewan','Manitoba','Ontario','Quebec','New Brunswick','Nova Scotia','Prince Edward Island','Newfoundland and Labrador','Northwest Territories','Yukon'],matchKey:null},
+  {key:'ee',lbl:'Express Entry Profile',type:'select',required:false,
+   opts:['— Select —','Yes — Active Profile','No'],matchKey:null},
+  {key:'canada',lbl:'Currently Living in Canada',type:'select',required:false,
+   opts:['— Select —','Yes','No — Living Abroad'],matchKey:null},
+  {key:'funds',lbl:'Settlement Funds Available (CAD $)',type:'number',required:false,matchKey:null},
+  {key:'nw',lbl:'Personal Net Worth (CAD $)',type:'number',required:false,matchKey:'networthMin'},
+  {key:'inv',lbl:'Investment Capital Available (CAD $)',type:'number',required:false,matchKey:'investMin'},
+  {key:'biz',lbl:'Business Management Experience (Years)',type:'number',required:false,matchKey:null},
+  {key:'notes',lbl:'Consultant Notes',type:'textarea',required:false,matchKey:null},
+];
+
+// ─── Default tabs ───
+const DEFAULT_TABS=[
+  {id:'dashboard',lbl:'Dashboard',type:'dashboard',deletable:false},
+  {id:'programs',lbl:'PNP Database',type:'programs',deletable:false},
+  {id:'clients',lbl:'Clients',type:'clients',deletable:false},
+  {id:'results',lbl:'Match Results',type:'results',deletable:false},
+];
+
+// ─── Default custom metrics ───
+const DEFAULT_METRICS=[
+  {id:'m1',lbl:'Total Programs',expr:'progs.length',color:''},
+  {id:'m2',lbl:'Provinces/Territories',expr:'[...new Set(progs.map(p=>p.province))].length',color:''},
+  {id:'m3',lbl:'Express Entry Linked',expr:'progs.filter(p=>p.expressEntry).length',color:''},
+  {id:'m4',lbl:'Entrepreneur Streams',expr:'progs.filter(p=>p.type===\'entrepreneur\').length',color:'var(--red)'},
+  {id:'m5',lbl:'Saved Clients',expr:'clients.length',color:'var(--blue)'},
+  {id:'m6',lbl:'Match Results',expr:'results.length',color:'var(--teal)'},
+];
+
+// ═══════════════════════════════════════════════════════════
+// PERSIST
+// ═══════════════════════════════════════════════════════════
+function saveAll(msg){
+  localStorage.setItem(SK.progs,JSON.stringify(PROGS));
+  localStorage.setItem(SK.cols,JSON.stringify(COLS));
+  localStorage.setItem(SK.clients,JSON.stringify(CLIENTS));
+  localStorage.setItem(SK.results,JSON.stringify(RESULTS));
+  localStorage.setItem(SK.tabs,JSON.stringify(TABS));
+  localStorage.setItem(SK.customTables,JSON.stringify(CUSTOM_TABLES));
+  localStorage.setItem(SK.clientFields,JSON.stringify(CLIENT_EXTRA_FIELDS));
+  localStorage.setItem(SK.metrics,JSON.stringify(CUSTOM_METRICS));
+  localStorage.setItem(SK.updateLog,JSON.stringify(UPDATE_LOG));
+  saveHeadings();
+  showSaveBar(msg||'Changes saved');
+}
+function loadAll(){
+  try{PROGS=JSON.parse(localStorage.getItem(SK.progs))||cloneDefault();}catch{PROGS=cloneDefault();}
+  try{COLS=JSON.parse(localStorage.getItem(SK.cols))||JSON.parse(JSON.stringify(BASE_COLS));}catch{COLS=JSON.parse(JSON.stringify(BASE_COLS));}
+  try{CLIENTS=JSON.parse(localStorage.getItem(SK.clients))||[];}catch{CLIENTS=[];}
+  try{RESULTS=JSON.parse(localStorage.getItem(SK.results))||[];}catch{RESULTS=[];}
+  try{TABS=JSON.parse(localStorage.getItem(SK.tabs))||JSON.parse(JSON.stringify(DEFAULT_TABS));}catch{TABS=JSON.parse(JSON.stringify(DEFAULT_TABS));}
+  try{CUSTOM_TABLES=JSON.parse(localStorage.getItem(SK.customTables))||[];}catch{CUSTOM_TABLES=[];}
+  try{CLIENT_EXTRA_FIELDS=JSON.parse(localStorage.getItem(SK.clientFields))||[];}catch{CLIENT_EXTRA_FIELDS=[];}
+  try{CUSTOM_METRICS=JSON.parse(localStorage.getItem(SK.metrics))||JSON.parse(JSON.stringify(DEFAULT_METRICS));}catch{CUSTOM_METRICS=JSON.parse(JSON.stringify(DEFAULT_METRICS));}
+  try{UPDATE_LOG=JSON.parse(localStorage.getItem(SK.updateLog))||[];}catch{UPDATE_LOG=[];}
+}
+function saveHeadings(){
+  const h={};
+  document.querySelectorAll('[data-heading]').forEach(el=>h[el.dataset.heading]=el.textContent.trim());
+  localStorage.setItem(SK.headings,JSON.stringify(h));
+}
+function loadHeadings(){
+  try{
+    const h=JSON.parse(localStorage.getItem(SK.headings))||{};
+    Object.entries(h).forEach(([k,v])=>{const el=document.querySelector(`[data-heading="${k}"]`);if(el&&v)el.textContent=v;});
+  }catch{}
+  const t=localStorage.getItem(SK.pgtitle);
+  if(t){document.getElementById('page-title-tag').textContent=t;const el=document.getElementById('pg-title-input');if(el)el.value=t;}
+}
+function tc(t){const s=String(t||'').toLowerCase();return(s.includes('entrepreneur')||s.includes('business'))?'b-red':s.includes('graduate')?'b-green':'b-blue';}
+function typeLabel(t){const s=String(t||'').toLowerCase();if(s.includes('entrepreneur')||s.includes('business'))return'Entrepreneur / Business';if(s.includes('graduate'))return'Graduate';if(s.includes('skilled'))return'Skilled Worker';return t||'—';}
+function statusLabel(v){const s=String(v||'');if(s==='Open')return'Open';if(s==='Paused')return'Paused';if(s==='Closed')return'Closed';if(s.includes('Intake'))return'Intake Limited';return s||'—';}
+// Safe HTML escape
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ═══════════════════════════════════════════════════════════
+// TABS — dynamic tab system
+// ═══════════════════════════════════════════════════════════
+function renderTabs(){
+  renderNavTabs();
+  renderViews();
+}
+function editTabLabel(span){
+  if(!editMode)return;
+  span.contentEditable='true';
+  span.focus();
+  const range=document.createRange();range.selectNodeContents(span);
+  const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+  const save=()=>{
+    span.contentEditable='false';
+    const tabId=span.closest('[data-tabid]')?.dataset.tabid;
+    const tab=TABS.find(t=>t.id===tabId);
+    if(tab){tab.lbl=span.textContent.trim()||tab.lbl;}
+    saveAll('Tab renamed');
+  };
+  span.addEventListener('blur',save,{once:true});
+  span.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();span.blur();}});
+}
+function showTab(tabId){
+  _activeTabId=tabId;
+  document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  const activeNav=document.querySelector(`[data-tabid="${tabId}"]`);
+  if(activeNav)activeNav.classList.add('active');
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  const view=document.getElementById('view-'+tabId);
+  if(view)view.classList.add('active');
+  // Re-render the active view
+  const tab=TABS.find(t=>t.id===tabId);
+  if(!tab)return;
+  if(tab.type==='dashboard')renderDash();
+  else if(tab.type==='programs'){populateProvDD();renderProgs();}
+  else if(tab.type==='clients')renderClients();
+  else if(tab.type==='results')renderResults();
+  else if(tab.type==='custom_table')renderCustomTable(tab);
+}
+function openAddTab(){
+  document.getElementById('table-modal-title').textContent='Add New Tab / Table';
+  document.getElementById('table-modal-body').innerHTML=`
+    <div class="fg" style="margin-bottom:12px"><label>Tab Name</label><input type="text" id="new-tab-name" placeholder="e.g. Comparison Notes, Fee Tracker"></div>
+    <div class="fg" style="margin-bottom:12px"><label>Tab Type</label>
+      <select id="new-tab-type">
+        <option value="custom_table">Custom Table (add your own columns &amp; rows)</option>
+        <option value="notes">Notes / Text Page</option>
+      </select>
+    </div>
+    <div class="fg" style="margin-bottom:16px"><label>Description (optional)</label><input type="text" id="new-tab-desc" placeholder="What is this tab for?"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-success btn-sm" onclick="createNewTab()">+ Create Tab</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('table-modal')">Cancel</button>
+    </div>`;
+  document.getElementById('table-modal').classList.add('open');
+}
+function createNewTab(){
+  const name=document.getElementById('new-tab-name').value.trim();
+  const type=document.getElementById('new-tab-type').value;
+  const desc=document.getElementById('new-tab-desc').value.trim();
+  if(!name){toast('⚠ Tab name is required');return;}
+  const id='tab_'+Date.now();
+  const tab={id,lbl:name,type,desc,deletable:true};
+  if(type==='custom_table'){
+    tab.cols=[{key:'row_name',lbl:'Name',type:'text',show:true},{key:'row_notes',lbl:'Notes',type:'text',show:true}];
+    tab.rows=[];
+  }else if(type==='notes'){
+    tab.content='Click to edit these notes…';
+  }
+  TABS.push(tab);
+  saveAll('New tab created');
+  closeM('table-modal');
+  renderTabs();
+  showTab(id);
+  toast('✅ Tab "'+name+'" created');
+}
+function deleteTab(tabId){
+  const tab=TABS.find(t=>t.id===tabId);
+  if(!tab?.deletable){toast('Cannot delete built-in tabs');return;}
+  showConfirm(`Delete tab "${tab.lbl}"?`,'All data in this tab will be permanently deleted.',()=>{
+    TABS=TABS.filter(t=>t.id!==tabId);
+    saveAll('Tab deleted');
+    const firstTab=TABS[0];
+    renderTabs();
+    if(firstTab)showTab(firstTab.id);
+    toast('🗑 Tab deleted');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// VIEWS — render HTML containers for each tab
+// ═══════════════════════════════════════════════════════════
+function renderViews(){
+  const container=document.getElementById('views-container');
+  container.innerHTML='';
+  TABS.forEach(tab=>{
+    const div=document.createElement('div');
+    div.className='view'+(tab.id===_activeTabId?' active':'');
+    div.id='view-'+tab.id;
+    if(tab.type==='dashboard')div.innerHTML=dashboardHTML();
+    else if(tab.type==='programs')div.innerHTML=programsHTML();
+    else if(tab.type==='clients')div.innerHTML=clientsHTML();
+    else if(tab.type==='results')div.innerHTML=resultsHTML();
+    else if(tab.type==='custom_table')div.innerHTML=customTableHTML(tab);
+    else if(tab.type==='notes')div.innerHTML=notesHTML(tab);
+    container.appendChild(div);
+  });
+  // Attach event listeners after DOM created
+  TABS.forEach(tab=>{
+    if(tab.type==='programs'){
+      ['p-q','p-prov','p-type','p-ee'].forEach(id=>{
+        const el=document.getElementById(id);if(el)el.addEventListener('input',renderProgs);
+        if(el&&el.tagName==='SELECT')el.addEventListener('change',renderProgs);
+      });
+    }
+    if(tab.type==='clients'){
+      ['c-q','c-sf'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el)el.addEventListener(el.tagName==='SELECT'?'change':'input',renderClients);
+      });
+    }
+    if(tab.type==='results'){
+      ['r-q','r-cf','r-ef'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el)el.addEventListener(el.tagName==='SELECT'?'change':'input',renderResults);
+      });
+    }
+  });
+  loadHeadings();
+  // Render active tab content
+  const activeTab=TABS.find(t=>t.id===_activeTabId)||TABS[0];
+  if(activeTab){
+    if(activeTab.type==='dashboard')renderDash();
+    else if(activeTab.type==='programs'){populateProvDD();renderProgs();}
+    else if(activeTab.type==='clients')renderClients();
+    else if(activeTab.type==='results')renderResults();
+    else if(activeTab.type==='custom_table')renderCustomTable(activeTab);
+  }
+}
+
+function getDashBanners(){
+  try{return JSON.parse(localStorage.getItem(SK.dashbanners))||{
+    warn:'⚠️ For informational use only. Always verify requirements at official government websites before advising clients.',
+    live:'This tool links to official government sources. Use 🔄 Live Update to check for program changes.',
+    warnVisible:true, liveVisible:true
+  };}catch{return{warn:'⚠️ Disclaimer',live:'Live data mode',warnVisible:true,liveVisible:true};}
+}
+function saveDashBanners(b){localStorage.setItem(SK.dashbanners,JSON.stringify(b));}
+function dashboardHTML(){
+  const banners=getDashBanners();
+  const editBannerBtn=(id,label)=>editMode?`<button class="btn btn-amber btn-sm" style="font-size:10px;padding:2px 7px;flex-shrink:0" onclick="editDashBanner('${id}')">✏ Edit</button><button class="btn btn-danger btn-sm" style="font-size:10px;padding:2px 7px;flex-shrink:0" onclick="toggleDashBanner('${id}')">${banners[id+'Visible']!==false?'Hide':'Show'}</button>`:'';
+  return`<div class="ph">
+    <div>
+      <h2 data-heading="h-dashboard" onclick="if(editMode)editInline('h-dashboard')">Canada PNP Dashboard</h2>
+      <p data-heading="s-dashboard" onclick="if(editMode)editInline('s-dashboard')">All Provincial Nominee Programs — updated live from official sources</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${editMode?`<button class="btn btn-amber btn-sm" onclick="openAddMetric()">+ Add Metric Card</button>`:''}
+    </div>
+  </div>
+  ${banners.warnVisible!==false?`
+  <div id="dash-warn-banner" style="background:#fef3e2;border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;padding:8px 13px;font-size:12px;color:#92560a;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="flex:1" id="dash-warn-text">${banners.warn}</span>
+    <span style="display:flex;gap:5px">${editBannerBtn('warn','Warning')}</span>
+  </div>`:`<div style="margin-bottom:6px">${editMode?`<button class="btn btn-sec btn-sm" onclick="toggleDashBanner('warn')">Show Disclaimer Banner</button>`:''}</div>`}
+  ${banners.liveVisible!==false?`
+  <div id="dash-live-banner" class="live-banner" style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="live-dot"></div>
+    <span style="flex:1" id="dash-live-text">${banners.live} Last verified: ${getLastVerifiedDate()}.</span>
+    <span style="display:flex;gap:5px">${editBannerBtn('live','Live Banner')}</span>
+  </div>`:`<div style="margin-bottom:6px">${editMode?`<button class="btn btn-sec btn-sm" onclick="toggleDashBanner('live')">Show Live Data Banner</button>`:''}</div>`}
+  <div class="metrics" id="dash-metrics"></div>
+  <div class="tabg">
+    <button class="tabb on" onclick="dtab(this,'dt-prov')">By Province</button>
+    <button class="tabb"    onclick="dtab(this,'dt-type')">By Stream Type</button>
+    <button class="tabb"    onclick="dtab(this,'dt-src')">Official Sources</button>
+  </div>
+  <div class="tabp on" id="dt-prov"><div class="pg" id="prov-grid"></div></div>
+  <div class="tabp" id="dt-type"><div id="type-grid"></div></div>
+  <div class="tabp" id="dt-src"><div id="src-grid"></div></div>`;
+}
+function editDashBanner(id){
+  const b=getDashBanners();
+  const cur=b[id]||'';
+  const newVal=prompt('Edit banner text:',cur);
+  if(newVal===null)return;
+  b[id]=newVal.trim()||cur;
+  saveDashBanners(b);
+  renderDash();
+  toast('✅ Banner updated');
+}
+function toggleDashBanner(id){
+  const b=getDashBanners();
+  b[id+'Visible']=b[id+'Visible']===false?true:false;
+  saveDashBanners(b);
+  renderDash();
+}
+function programsHTML(){
+  return`<div class="ph">
+    <div>
+      <h2 data-heading="h-programs" onclick="if(editMode)editInline('h-programs')">PNP Program Database</h2>
+      <p data-heading="s-programs" onclick="if(editMode)editInline('s-programs')">Click any cell in Edit Mode to edit · Changes auto-save</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" onclick="openAddProg()">+ Add Program</button>
+      <button class="btn btn-amber btn-sm" onclick="openAllDropdownsManager()">⚙ Manage Dropdowns</button>
+      <button class="btn btn-sec btn-sm"  onclick="openColMgr()">⚙ Columns</button>
+      <button class="btn btn-sec btn-sm"  onclick="exportCSV()">⬇ CSV</button>
+    </div>
+  </div>
+  <div class="sbar">
+    <input type="text" id="p-q" placeholder="🔍 Search programs…">
+    <select id="p-prov"><option value="">All provinces</option></select>
+    <select id="p-type"><option value="">All types</option><option value="Skilled Worker">Skilled Worker</option><option value="Entrepreneur / Business">Entrepreneur / Business</option><option value="Graduate">Graduate</option></select>
+    <select id="p-ee"><option value="">All streams</option><option value="yes">Express Entry</option><option value="no">Non-EE</option></select>
+    <span id="p-count" style="font-size:11px;color:var(--muted)"></span>
+  </div>
+  <div class="twrap"><table id="prog-tbl"><thead id="prog-thead"></thead><tbody id="prog-tbody"></tbody></table></div>`;
+}
+function clientsHTML(){
+  return`<div class="ph">
+    <div>
+      <h2 data-heading="h-clients" onclick="if(editMode)editInline('h-clients')">Client Profiles</h2>
+      <p data-heading="s-clients" onclick="if(editMode)editInline('s-clients')">Saved profiles · Run matches · View history</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" onclick="openNewClient()">+ New Client</button>
+      ${editMode?`<button class="btn btn-amber btn-sm" onclick="openAddClientField()">+ Add Field</button>`:''}
+    </div>
+  </div>
+  <div class="sbar">
+    <input type="text" id="c-q" placeholder="🔍 Search clients…">
+    <select id="c-sf"><option value="">All statuses</option><option>Active</option><option>In Progress</option><option>Submitted</option><option>Nominated</option><option>Archived</option></select>
+  </div>
+  <div id="clients-list"></div>`;
+}
+function resultsHTML(){
+  return`<div class="ph">
+    <div>
+      <h2 data-heading="h-results" onclick="if(editMode)editInline('h-results')">Match Results</h2>
+      <p data-heading="s-results" id="res-sub">Eligibility match history for all clients</p>
+    </div>
+  </div>
+  <div class="sbar">
+    <input type="text" id="r-q" placeholder="🔍 Search results…">
+    <select id="r-cf"><option value="">All clients</option></select>
+    <select id="r-ef"><option value="">All eligibility</option><option value="Eligible">Eligible only</option><option value="Partial">Partial only</option></select>
+  </div>
+  <div id="results-area"><div class="empty">No results yet — go to Clients and run a match.</div></div>`;
+}
+function customTableHTML(tab){
+  return`<div class="ph">
+    <div>
+      <div class="tbl-section-title" data-heading="tth_${tab.id}" onclick="if(editMode)editInline('tth_${tab.id}')">${tab.lbl}</div>
+      <p style="font-size:12px;color:var(--muted);margin-top:3px">${tab.desc||'Custom table — add your own rows and columns'}</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-blue btn-sm" onclick="addCustomTableRow('${tab.id}')">+ Add Row</button>
+      <button class="btn btn-sec btn-sm"  onclick="manageCustomTableCols('${tab.id}')">⚙ Columns</button>
+      ${editMode?`<button class="btn btn-danger btn-sm" onclick="deleteTab('${tab.id}')">🗑 Delete This Tab</button>`:''}
+    </div>
+  </div>
+  <div class="twrap"><table><thead id="cthead-${tab.id}"></thead><tbody id="ctbody-${tab.id}"></tbody></table></div>`;
+}
+function notesHTML(tab){
+  return`<div class="ph">
+    <div>
+      <div class="tbl-section-title" data-heading="nth_${tab.id}" onclick="if(editMode)editInline('nth_${tab.id}')">${tab.lbl}</div>
+    </div>
+    ${editMode?`<button class="btn btn-danger btn-sm" onclick="deleteTab('${tab.id}')">🗑 Delete This Tab</button>`:''}
+  </div>
+  <div class="card">
+    <div id="notes-content-${tab.id}" contenteditable="${editMode}" style="min-height:200px;font-size:14px;line-height:1.7;outline:none;${editMode?'background:#fffde7;border-radius:6px;padding:8px;':''}"
+      onblur="saveNotesContent('${tab.id}',this.innerHTML)">${tab.content||'Click to edit…'}</div>
+  </div>`;
+}
+function saveNotesContent(tabId, html){
+  const tab=TABS.find(t=>t.id===tabId);
+  if(tab){tab.content=html;saveAll('Notes saved');}
+}
+
+// ═══════════════════════════════════════════════════════════
+// EDIT INLINE (contenteditable for headings)
+// ═══════════════════════════════════════════════════════════
+function editInline(idOrEl){
+  const el=typeof idOrEl==='string'?document.querySelector(`[data-heading="${idOrEl}"]`)||document.getElementById(idOrEl):idOrEl;
+  if(!el||el.contentEditable==='true')return;
+  el.contentEditable='true';el.focus();
+  const range=document.createRange();range.selectNodeContents(el);
+  const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+  const done=()=>{el.contentEditable='false';saveHeadings();showSaveBar('Heading updated');};
+  el.addEventListener('blur',done,{once:true});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}});
+}
+function toggleEdit(){
+  editMode=!editMode;
+  document.getElementById('etoggle').classList.toggle('on',editMode);
+  document.getElementById('edot').style.background=editMode?'var(--amber)':'#ccc';
+  document.getElementById('elbl').textContent=editMode?'Edit Mode ON':'Edit Mode';
+  document.getElementById('ebanner').classList.toggle('on',editMode);
+  // Rebuild nav tabs to show/hide the "+ Tab" button
+  renderNavTabs();
+  // Re-render just the current active view content — stay on the same tab
+  const tab=TABS.find(t=>t.id===_activeTabId)||TABS[0];
+  if(tab){
+    if(tab.type==='dashboard')renderDash();
+    else if(tab.type==='programs'){populateProvDD();renderProgs();}
+    else if(tab.type==='clients')renderClients();
+    else if(tab.type==='results')renderResults();
+    else if(tab.type==='custom_table')renderCustomTable(tab);
+    // Notes tabs: re-render so contenteditable state updates
+    else if(tab.type==='notes'){
+      const noteEl=document.getElementById('notes-content-'+tab.id);
+      if(noteEl)noteEl.contentEditable=editMode?'true':'false';
+    }
+  }
+  if(editMode)toast('✏️ Click any cell, heading, column header, or tab label to edit');
+}
+
+// Render ONLY the nav tab bar (fast — no view rebuild)
+function renderNavTabs(){
+  const container=document.getElementById('nav-tabs');
+  container.innerHTML='';
+  TABS.forEach(tab=>{
+    const div=document.createElement('div');
+    div.className='nav-tab'+(tab.id===_activeTabId?' active':'');
+    div.dataset.tabid=tab.id;
+    div.innerHTML=`<span class="tlbl" data-heading="tab_${tab.id}">${tab.lbl}</span>`;
+    div.addEventListener('click',e=>{
+      if(editMode&&e.target.classList.contains('tlbl')){editTabLabel(div.querySelector('.tlbl'));return;}
+      showTab(tab.id);
+    });
+    container.appendChild(div);
+  });
+  if(editMode){
+    const add=document.createElement('div');
+    add.className='nav-tab';
+    add.innerHTML='<span style="color:var(--green);font-weight:700">+ Tab</span>';
+    add.onclick=()=>openAddTab();
+    container.appendChild(add);
+  }
+  // Restore headings from storage
+  const h=JSON.parse(localStorage.getItem(SK.headings)||'{}');
+  Object.entries(h).forEach(([k,v])=>{const el=document.querySelector(`[data-heading="${k}"]`);if(el&&v&&el.textContent!==v)el.textContent=v;});
+}
+
+function showTab(tabId){
+  _activeTabId=tabId;
+  // Update nav highlight
+  document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  const activeNav=document.querySelector(`[data-tabid="${tabId}"]`);
+  if(activeNav)activeNav.classList.add('active');
+  // Switch view visibility
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  const view=document.getElementById('view-'+tabId);
+  if(view)view.classList.add('active');
+  // Re-render the active view content
+  const tab=TABS.find(t=>t.id===tabId);
+  if(!tab)return;
+  if(tab.type==='dashboard')renderDash();
+  else if(tab.type==='programs'){populateProvDD();renderProgs();}
+  else if(tab.type==='clients')renderClients();
+  else if(tab.type==='results')renderResults();
+  else if(tab.type==='custom_table')renderCustomTable(tab);
+}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+function dtab(b,p){
+  document.querySelectorAll('#view-dashboard .tabb, #view-'+_activeTabId+' .tabb').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('#view-dashboard .tabp, #view-'+_activeTabId+' .tabp').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');document.getElementById(p)?.classList.add('on');
+}
+
+// ═══════════════════════════════════════════════════════════
+// DASHBOARD RENDER
+// ═══════════════════════════════════════════════════════════
+function getLastVerifiedDate(){
+  if(PROGS.length===0)return'—';
+  const dates=PROGS.map(p=>p.lastVerified||p.updated||'').filter(Boolean).sort();
+  return dates[dates.length-1]||'—';
+}
+function renderDash(){
+  const metricsEl=document.getElementById('dash-metrics');
+  if(!metricsEl)return;
+  const progs=PROGS,clients=CLIENTS,results=RESULTS;
+  metricsEl.innerHTML=CUSTOM_METRICS.map(m=>`
+    <div class="metric">
+      <div class="metric-lbl" onclick="if(editMode)editMetricLabel('${m.id}',this)">${m.lbl}</div>
+      <div class="metric-val" style="${m.color?'color:'+m.color:''}">${evalMetric(m.expr,progs,clients,results)}</div>
+      <span class="metric-del ${editMode?'edshow':''}" onclick="deleteMetric('${m.id}')">✕</span>
+    </div>`).join('');
+  // Province grid
+  const byP={};PROGS.forEach(p=>{if(!byP[p.province])byP[p.province]=[];byP[p.province].push(p);});
+  const pg=document.getElementById('prov-grid');if(!pg)return;
+  pg.innerHTML=Object.entries(byP).sort((a,b)=>a[0].localeCompare(b[0])).map(([prov,ps])=>`
+    <div class="pc" onclick="filterProv('${prov}')">
+      <div style="font-weight:700;font-size:13px;margin-bottom:5px">${prov}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px">
+        ${[...new Set(ps.map(p=>p.type))].map(t=>`<span class="badge ${tc(t)}">${typeLabel(t)}</span>`).join('')}
+        ${ps.some(p=>isYes(p.expressEntry))?'<span class="badge b-purple">EE</span>':''}
+      </div>
+      <div style="font-size:11px;color:var(--muted)">${ps.length} stream${ps.length>1?'s':''}</div>
+    </div>`).join('');
+  // Type grid
+  const tg=document.getElementById('type-grid');if(!tg)return;
+  let thtml='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px">';
+  [['Skilled Worker','Skilled Worker','b-blue'],['Entrepreneur / Business','Entrepreneur / Business','b-red'],['Graduate','Graduate','b-green']].forEach(([t,l,c])=>{
+    const ps=PROGS.filter(p=>p.type===t);
+    thtml+=`<div><div style="font-weight:700;font-size:12px;margin-bottom:8px"><span class="badge ${c}">${l}</span> <span style="color:var(--muted)">(${ps.length})</span></div>`;
+    ps.forEach(p=>thtml+=`<div class="card-sm" style="cursor:pointer;padding:9px 12px;margin-bottom:5px" onclick="openDetail('${p.id}')"><div style="font-weight:600;font-size:12px">${p.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${p.province} · ${p.fees||'—'}</div></div>`);
+    thtml+=`</div>`;
+  });thtml+=`</div>`;tg.innerHTML=thtml;
+  // Sources
+  const sg=document.getElementById('src-grid');if(!sg)return;
+  sg.innerHTML=`<div class="inf" style="margin-bottom:12px">All data sourced exclusively from official government websites. Use 🔄 Live Update to check for changes.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px">
+      ${[['🇨🇦 IRCC — All PNPs','https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/provincial-nominees.html'],
+         ['BC PNP','https://www.welcomebc.ca'],['Alberta AAIP','https://www.alberta.ca/alberta-advantage-immigration-program'],
+         ['Saskatchewan SINP','https://www.saskatchewan.ca/sinp'],['Manitoba MPNP','https://www.immigratemanitoba.com'],
+         ['Ontario OINP','https://www.ontario.ca/page/ontario-immigrant-nominee-program'],
+         ['Quebec MIFI','https://www.immigration.quebec.ca/en/'],['Nova Scotia NSNP','https://novascotiaimmigration.com'],
+         ['New Brunswick NBPNP','https://www.welcomenb.ca'],
+         ['PEI PNP','https://www.princeedwardisland.ca/en/topic/pei-provincial-nominee-program'],
+         ['NL NLPNP','https://www.gov.nl.ca/immigration'],['NWT NTNP','https://www.immigratenwt.ca'],
+         ['Yukon YNP','https://yukon.ca/en/yukon-nominee-program']
+      ].map(([n,u])=>`<div class="card-sm" style="padding:9px 12px;display:flex;justify-content:space-between;align-items:center">
+        <a href="${u}" target="_blank" style="font-weight:600;font-size:12px">${n} ↗</a>
+        ${editMode?`<button class="btn btn-purple btn-sm" onclick="runLiveCheckForURL('${u}','${n}')">🔄 Check</button>`:''}
+      </div>`).join('')}
+    </div>`;
+}
+function evalMetric(expr,progs,clients,results){
+  try{return new Function('progs','clients','results','return '+expr)(progs,clients,results);}catch{return'?';}
+}
+function editMetricLabel(id,el){
+  if(!editMode)return;
+  el.contentEditable='true';el.focus();
+  const sel=window.getSelection();const range=document.createRange();range.selectNodeContents(el);sel.removeAllRanges();sel.addRange(range);
+  const done=()=>{el.contentEditable='false';const m=CUSTOM_METRICS.find(x=>x.id===id);if(m)m.lbl=el.textContent.trim();saveAll('Metric label updated');};
+  el.addEventListener('blur',done,{once:true});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}});
+}
+function deleteMetric(id){CUSTOM_METRICS=CUSTOM_METRICS.filter(m=>m.id!==id);saveAll('Metric removed');renderDash();}
+function openAddMetric(){
+  document.getElementById('table-modal-title').textContent='Add Metric Card to Dashboard';
+  document.getElementById('table-modal-body').innerHTML=`
+    <div class="fg" style="margin-bottom:10px"><label>Metric Label</label><input type="text" id="new-met-lbl" placeholder="e.g. Open Programs"></div>
+    <div class="fg" style="margin-bottom:10px"><label>Value Expression</label>
+      <input type="text" id="new-met-expr" placeholder="e.g. progs.filter(p=>p.status==='Open').length">
+      <small style="color:var(--muted);font-size:11px">Use: progs, clients, results arrays. E.g. progs.length, clients.filter(c=>c.status==='Active').length</small>
+    </div>
+    <div class="fg" style="margin-bottom:14px"><label>Value Color (optional)</label>
+      <select id="new-met-color">
+        <option value="">Default (black)</option>
+        <option value="var(--blue)">Blue</option><option value="var(--green)">Green</option>
+        <option value="var(--red)">Red</option><option value="var(--amber)">Amber</option>
+        <option value="var(--teal)">Teal</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-success btn-sm" onclick="addMetric()">+ Add Metric</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('table-modal')">Cancel</button>
+    </div>`;
+  document.getElementById('table-modal').classList.add('open');
+}
+function addMetric(){
+  const lbl=document.getElementById('new-met-lbl').value.trim();
+  const expr=document.getElementById('new-met-expr').value.trim();
+  const color=document.getElementById('new-met-color').value;
+  if(!lbl||!expr){toast('⚠ Label and expression required');return;}
+  CUSTOM_METRICS.push({id:'m_'+Date.now(),lbl,expr,color});
+  saveAll('Metric added');closeM('table-modal');renderDash();toast('✅ Metric added');
+}
+function filterProv(p){
+  const tab=TABS.find(t=>t.type==='programs');if(!tab)return;
+  showTab(tab.id);
+  setTimeout(()=>{const sel=document.getElementById('p-prov');if(sel){sel.value=p;renderProgs();}},50);
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROGRAMS TABLE
+// ═══════════════════════════════════════════════════════════
+function visCols(){return COLS.filter(c=>c.show);}
+function populateProvDD(){
+  const sel=document.getElementById('p-prov');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">All provinces</option>';
+  [...new Set(PROGS.map(p=>p.province))].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;sel.appendChild(o);});
+  sel.value=cur;
+}
+function renderProgs(){
+  const q=(document.getElementById('p-q')?.value||'').toLowerCase();
+  const pv=document.getElementById('p-prov')?.value||'';
+  const ty=document.getElementById('p-type')?.value||'';
+  const ee=document.getElementById('p-ee')?.value||'';
+  const rows=PROGS.filter(p=>{
+    if(pv&&p.province!==pv)return false;
+    if(ty&&!String(p.type||'').toLowerCase().includes(ty.toLowerCase().split(' ')[0]))return false;
+    if(ee==='yes'&&!isYes(p.expressEntry))return false;
+    if(ee==='no'&&isYes(p.expressEntry))return false;
+    if(q&&!(p.name+p.province+p.type).toLowerCase().includes(q))return false;
+    return true;
+  });
+  const cnt=document.getElementById('p-count');if(cnt)cnt.textContent=`${rows.length} of ${PROGS.length}`;
+  const vc=visCols();const em=editMode;
+  const thead=document.getElementById('prog-thead');if(!thead)return;
+  thead.innerHTML=`<tr>
+    ${vc.map(c=>`<th class="${em?'eh':''}" id="th-${c.key}" ${em?`onclick="editColHeader('${c.key}')"`:''}>${c.lbl}${em?'<span style="opacity:.35;font-size:9px;margin-left:3px">✏</span>':''}</th>`).join('')}
+    <th style="width:110px">Actions</th>
+  </tr>`;
+  const tbody=document.getElementById('prog-tbody');if(!tbody)return;
+  tbody.innerHTML=rows.length===0
+    ?`<tr><td colspan="${vc.length+1}" style="text-align:center;padding:30px;color:#bbb">No programs match the current filters.</td></tr>`
+    :rows.map(p=>`<tr>
+      ${vc.map(c=>{
+        const v=p[c.key]!==undefined?p[c.key]:'';
+        let d='';
+        if(c.key==='name')d=`<strong style="font-size:12px;cursor:pointer" onclick="openDetail('${p.id}')">${v||'—'}</strong>`;
+        else if(c.key==='type')d=`<span class="badge ${tc(v)}">${typeLabel(v)}</span>`;
+        else if(c.type==='checkbox'||c.key==='expressEntry'||c.key==='jobOffer')d=isYes(v)?'<span class="badge b-green">Yes</span>':'<span class="badge b-gray">No</span>';
+        else if(c.key==='status'){const sc=v==='Open'?'b-green':v==='Paused'?'b-amber':'b-red';d=`<span class="badge ${sc}">${statusLabel(v)}</span>`;}
+        else if(c.type==='url'&&v)d=`<a href="${v}" target="_blank" style="font-size:11px">View ↗</a>`;
+        else if(c.type==='number'&&(c.key==='networthMin'||c.key==='investMin'))d=v>0?`$${Number(v).toLocaleString()}`:'—';
+        else d=`<span style="font-size:12px">${String(v||'—').substring(0,55)}${String(v||'').length>55?'…':''}</span>`;
+        return`<td ${em?`onclick="cellClick(event,'${p.id}','${c.key}')"`:''}>${d}</td>`;
+      }).join('')}
+      <td><div class="rbtns">
+        <button class="rb rb-e" onclick="openDetail('${p.id}')">View</button>
+        <button class="rb rb-e" onclick="openEditProg('${p.id}')">✏</button>
+        <button class="rb rb-c" onclick="dupProg('${p.id}')">⧉</button>
+        <button class="rb rb-d" onclick="confirmDelProg('${p.id}')">✕</button>
+      </div></td>
+    </tr>`).join('');
+  if(em)document.getElementById('prog-tbl')?.classList.add('em');
+  else document.getElementById('prog-tbl')?.classList.remove('em');
+}
+function editColHeader(key){
+  if(!editMode)return;
+  const th=document.getElementById('th-'+key);if(!th)return;
+  const col=COLS.find(c=>c.key===key);if(!col)return;
+  const cur=col.lbl;
+  th.innerHTML=`<input type="text" value="${cur}" style="border:none;background:#fffde7;font-size:11px;font-weight:700;width:100%;padding:2px 4px;outline:none;min-width:80px">`;
+  const inp=th.querySelector('input');inp.focus();inp.select();
+  inp.addEventListener('blur',()=>{const v=inp.value.trim()||cur;col.lbl=v;localStorage.setItem(SK.cols,JSON.stringify(COLS));showSaveBar('Column "'+v+'" renamed');renderProgs();});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}if(e.key==='Escape'){col.lbl=cur;renderProgs();}});
+}
+function cellClick(e,progId,key){
+  if(!editMode)return;
+  const td=e.currentTarget;if(td.classList.contains('ce'))return;
+  const p=PROGS.find(x=>x.id===progId);const c=COLS.find(x=>x.key===key);if(!p||!c)return;
+  const val=p[key]!==undefined?p[key]:'';
+  td.classList.add('ce');
+  const wrapper=document.createElement('div');
+  wrapper.style.cssText='display:flex;align-items:center;gap:4px;padding:0';
+  let inp;
+  if(c.type==='checkbox'){
+    inp=document.createElement('select');
+    [['true','Yes'],['false','No']].forEach(([v,l])=>{const o=document.createElement('option');o.value=v;o.textContent=l;if(String(val)===v)o.selected=true;inp.appendChild(o);});
+  } else if(c.type==='select'&&c.opts){
+    inp=document.createElement('select');
+    c.opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o||'— Select —';if(o===val)op.selected=true;inp.appendChild(op);});
+    // Add ⚙ button to edit options without leaving the cell
+    const editBtn=document.createElement('button');
+    editBtn.textContent='⚙';
+    editBtn.title='Edit dropdown options';
+    editBtn.style.cssText='border:1px solid var(--border);background:var(--white);border-radius:3px;padding:2px 5px;font-size:10px;cursor:pointer;flex-shrink:0;color:var(--amber)';
+    editBtn.onmousedown=(ev)=>{
+      ev.preventDefault();
+      const currentOpts=[...c.opts];
+      td.classList.remove('ce');td.innerHTML='';
+      // Save current value first
+      p[key]=inp.value;if(c.type==='number')p[key]=parseFloat(inp.value)||0;
+      openDropdownEditor('col',null,key,currentOpts,c.lbl);
+    };
+    wrapper.appendChild(inp);wrapper.appendChild(editBtn);
+  } else if(c.type==='textarea'){
+    inp=document.createElement('textarea');inp.value=String(val);inp.rows=3;
+    inp.style.minWidth='220px';
+  } else {
+    inp=document.createElement('input');inp.type=c.type==='number'?'number':'text';inp.value=String(val);
+  }
+  inp.style.cssText='border:none;background:#fffde7;padding:6px 8px;font-size:12px;font-family:inherit;flex:1;min-width:80px;outline:none';
+  if(!wrapper.contains(inp))wrapper.appendChild(inp);
+  td.innerHTML='';td.appendChild(wrapper);inp.focus();
+  if(inp.select&&c.type!=='select')inp.select();
+  const saveCell=()=>{
+    let nv=inp.value;
+    if(c.type==='checkbox')nv=nv==='true';
+    else if(c.type==='number')nv=parseFloat(nv)||0;
+    p[key]=nv;td.classList.remove('ce');saveAll('Cell updated');renderProgs();
+  };
+  inp.addEventListener('blur',ev=>{if(!ev.relatedTarget||!td.contains(ev.relatedTarget))saveCell();});
+  inp.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&c.type!=='textarea'){ev.preventDefault();inp.blur();}if(ev.key==='Escape'){td.classList.remove('ce');renderProgs();}});
+}
+function openDetail(id){
+  const p=PROGS.find(x=>x.id===id);if(!p)return;
+  document.getElementById('pm-title').textContent=p.name||'Program Details';
+  const today=new Date().toLocaleDateString('en-CA');
+  document.getElementById('pm-body').innerHTML=`
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+      <span class="badge ${tc(p.type)}">${typeLabel(p.type)}</span>
+      ${isYes(p.expressEntry)?'<span class="badge b-purple">Express Entry Linked</span>':''}
+      <span class="badge ${p.status==='Open'?'b-green':p.status==='Paused'?'b-amber':'b-red'}">${statusLabel(p.status)}</span>
+      ${p.lastVerified?`<span class="badge b-gray" style="font-size:10px">Verified ${p.lastVerified}</span>`:''}
+    </div>
+    <p style="font-size:13px;color:#444;margin-bottom:10px">${p.description||'No description saved.'}</p>
+    ${p.website?`<a href="${p.website}" target="_blank" style="font-size:12px;display:block;margin-bottom:12px">🔗 Official Website →</a>`:''}
+    ${p.criteria?`<div style="margin-top:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#aaa;margin-bottom:6px">Eligibility Criteria</div><div style="font-size:12px;white-space:pre-line;line-height:1.7;color:#333">${p.criteria}</div></div>`:''}
+    ${p.docs?`<div style="margin-top:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#aaa;margin-bottom:6px">Required Documents</div><div style="font-size:12px;white-space:pre-line;line-height:1.7;color:#333">${p.docs}</div></div>`:''}
+    ${p.notes?`<div style="margin-top:10px;background:#fef3e2;border-radius:7px;padding:10px 12px;font-size:12px;color:var(--amber)">${p.notes}</div>`:''}
+    <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+      ${[['Min CLB',p.clb||'—'],['Min Experience',`${p.expYears||0} yr`],['Job Offer',p.jobOffer?'Required':'Not required'],
+         ['Fees',p.fees||'—'],['Processing',p.processing||'—'],['Last Verified',p.lastVerified||'Not set'],
+         ...(p.networthMin>0?[['Min Net Worth','$'+Number(p.networthMin).toLocaleString()]]:[] ),
+         ...(p.investMin>0  ?[['Min Investment','$'+Number(p.investMin).toLocaleString()]]:[] ),
+      ].map(([k,v])=>`<div style="background:var(--bg);border-radius:5px;padding:7px 10px"><strong style="display:block;font-size:10px;color:#aaa;text-transform:uppercase">${k}</strong>${v}</div>`).join('')}
+    </div>`;
+  document.getElementById('pm-actions').innerHTML=`
+    <button class="btn btn-primary btn-sm" onclick="closeM('prog-modal');openEditProg('${id}')">✏ Edit All Fields</button>
+    <button class="btn btn-amber btn-sm" onclick="openAllDropdownsManager()">⚙ Edit Dropdowns</button>
+    <button class="btn btn-purple btn-sm" onclick="closeM('prog-modal');openLiveCheckForProg('${id}')">🔄 Check for Updates</button>
+    <button class="btn btn-sec btn-sm" onclick="closeM('prog-modal')">Close</button>`;
+  document.getElementById('prog-modal').classList.add('open');
+}
+function buildProgForm(p){
+  const allCols=[...COLS,
+    {key:'jobOfferProvince',lbl:'Job Offer Province',type:'text'},
+    {key:'eeRequired',lbl:'EE Profile Required',type:'checkbox'},
+    {key:'inCanadaRequired',lbl:'In Canada Required',type:'checkbox'},
+    {key:'fundsAmt',lbl:'Minimum Settlement Funds (CAD)',type:'number'},
+    {key:'ownershipPct',lbl:'Ownership % Required',type:'number'},
+    {key:'jobsCreate',lbl:'Minimum Jobs to Create',type:'number'},
+    {key:'website2',lbl:'Official Source 2 (URL)',type:'url'},
+  ].filter((c,i,arr)=>arr.findIndex(x=>x.key===c.key)===i);
+  let html='<div class="fg2">';
+  allCols.forEach(c=>{
+    const v=p&&p[c.key]!==undefined?p[c.key]:'';
+    const wide=['description','criteria','docs','notes'].includes(c.key);
+    const isSelect=c.type==='select'&&c.opts;
+    html+=`<div class="fg ${wide?'full':''}">`;
+    html+=`<label style="display:flex;align-items:center;gap:6px;justify-content:space-between">`;
+    html+=`<span>${c.lbl}</span>`;
+    if(isSelect){
+      html+=`<button type="button" class="rb rb-e" style="font-size:10px;padding:2px 7px;flex-shrink:0" onclick="openDropdownEditorByKey('col',null,'${c.key}')">⚙ Edit Options</button>`;
+    }
+    html+=`</label>`;
+    if(c.type==='textarea')html+=`<textarea id="pf-${c.key}" rows="${['description','criteria','docs','notes'].includes(c.key)?4:2}">${String(v).replace(/</g,'&lt;')}</textarea>`;
+    else if(c.type==='checkbox')html+=`<select id="pf-${c.key}"><option value="Yes" ${isYes(v)?'selected':''}>Yes</option><option value="No" ${!isYes(v)?'selected':''}>No</option></select>`;
+    else if(isSelect)html+=`<select id="pf-${c.key}">${c.opts.map(o=>`<option value="${o}" ${o===v?'selected':''}>${o||'— Select —'}</option>`).join('')}</select>`;
+    else if(c.type==='number')html+=`<input type="number" id="pf-${c.key}" value="${v||0}" min="0">`;
+    else if(c.type==='url')html+=`<input type="url" id="pf-${c.key}" value="${v||''}" placeholder="https://…">`;
+    else html+=`<input type="text" id="pf-${c.key}" value="${String(v||'').replace(/"/g,'&quot;')}">`;
+    html+=`</div>`;
+  });
+  html+='</div>';return html;
+}
+function readProgForm(){
+  const allCols=[...COLS,
+    {key:'jobOfferProvince',type:'text'},{key:'eeRequired',type:'checkbox'},
+    {key:'inCanadaRequired',type:'checkbox'},{key:'fundsAmt',type:'number'},
+    {key:'ownershipPct',type:'number'},{key:'jobsCreate',type:'number'},{key:'website2',type:'url'},
+  ].filter((c,i,arr)=>arr.findIndex(x=>x.key===c.key)===i);
+  const d={};
+  allCols.forEach(c=>{const el=document.getElementById('pf-'+c.key);if(!el)return;let v=el.value;if(c.type==='number')v=parseFloat(v)||0;d[c.key]=v;});
+  return d;
+}
+function openAddProg(){_editProgId=null;document.getElementById('pm-title').textContent='➕ Add New Program';document.getElementById('pm-body').innerHTML=buildProgForm(null);document.getElementById('pm-actions').innerHTML=`<button class="btn btn-primary" onclick="saveProg()">💾 Save</button><button class="btn btn-sec" onclick="closeM('prog-modal')">Cancel</button>`;document.getElementById('prog-modal').classList.add('open');}
+function openEditProg(id){_editProgId=id;const p=PROGS.find(x=>x.id===id)||{};document.getElementById('pm-title').textContent='✏️ Edit: '+(p.name||'Program');document.getElementById('pm-body').innerHTML=buildProgForm(p);document.getElementById('pm-actions').innerHTML=`<button class="btn btn-primary" onclick="saveProg()">💾 Save</button><button class="btn btn-sec" onclick="closeM('prog-modal')">Cancel</button><button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="confirmDelProg('${id}',true)">🗑 Delete</button>`;document.getElementById('prog-modal').classList.add('open');}
+function saveProg(){
+  const d=readProgForm();if(!d.name){toast('⚠ Program Name is required');return;}
+  if(_editProgId){const idx=PROGS.findIndex(p=>p.id===_editProgId);if(idx>=0){d.id=_editProgId;PROGS[idx]=d;}}
+  else{if(!d.id)d.id='prog-'+Date.now();if(PROGS.some(p=>p.id===d.id)){toast('⚠ ID already exists');return;}PROGS.push(d);}
+  saveAll('Program saved');closeM('prog-modal');renderProgs();renderDash();toast('✅ Program saved');
+}
+function dupProg(id){const p=PROGS.find(x=>x.id===id);if(!p)return;const c={...p,id:'prog-'+Date.now(),name:'[COPY] '+p.name};PROGS.push(c);saveAll('Duplicated');renderProgs();renderDash();toast('⧉ Duplicated');}
+function confirmDelProg(id,fromModal=false){const p=PROGS.find(x=>x.id===id)||{};showConfirm(`Delete "${p.name||'program'}"?`,'Permanent.',()=>{PROGS=PROGS.filter(x=>x.id!==id);saveAll('Deleted');if(fromModal)closeM('prog-modal');renderProgs();renderDash();toast('🗑 Deleted');});}
+// ─── MASTER DROPDOWN MANAGER — shows every dropdown in one place ───
+// ─── MASTER DROPDOWN MANAGER ─── safe key-based approach, no JSON in onclick ───
+function openAllDropdownsManager(){
+  document.getElementById('table-modal-title').textContent='⚙ Manage All Dropdown Options';
+  const sections=[];
+
+  // Program table select columns
+  const progSelectCols=COLS.filter(c=>c.type==='select');
+  if(progSelectCols.length){
+    let html='<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.4px;margin-bottom:8px">Program Database Fields</div>';
+    progSelectCols.forEach(c=>{
+      html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--white);border:1px solid var(--border);border-radius:7px;margin-bottom:6px">
+        <div style="min-width:0;flex:1;margin-right:12px">
+          <div style="font-weight:600;font-size:13px">${esc(c.lbl)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(c.opts||[]).join(' · ')||'No options yet'}</div>
+        </div>
+        <button class="btn btn-amber btn-sm" style="flex-shrink:0" onclick="openDropdownEditorByKey('col',null,'${c.key}')">⚙ Edit Options</button>
+      </div>`;
+    });
+    sections.push(html);
+  }
+
+  // Client profile select fields
+  const clientSelectFields=allClientFields().filter(f=>f.type==='select'&&f.opts);
+  if(clientSelectFields.length){
+    let html='<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.4px;margin:14px 0 8px">Client Profile Fields</div>';
+    clientSelectFields.forEach(f=>{
+      html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--white);border:1px solid var(--border);border-radius:7px;margin-bottom:6px">
+        <div style="min-width:0;flex:1;margin-right:12px">
+          <div style="font-weight:600;font-size:13px">${esc(f.lbl)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(f.opts||[]).filter(Boolean).join(' · ')||'No options'}</div>
+        </div>
+        <button class="btn btn-amber btn-sm" style="flex-shrink:0" onclick="openDropdownEditorByKey('clientfield',null,'${f.key}')">⚙ Edit Options</button>
+      </div>`;
+    });
+    sections.push(html);
+  }
+
+  // Custom table select columns
+  TABS.filter(t=>t.type==='custom_table').forEach(tab=>{
+    const selCols=(tab.cols||[]).filter(c=>c.type==='select');
+    if(!selCols.length)return;
+    let html=`<div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:.4px;margin:14px 0 8px">Custom Table: ${esc(tab.lbl)}</div>`;
+    selCols.forEach(c=>{
+      html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--white);border:1px solid var(--border);border-radius:7px;margin-bottom:6px">
+        <div style="min-width:0;flex:1;margin-right:12px">
+          <div style="font-weight:600;font-size:13px">${esc(c.lbl)}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${(c.opts||[]).join(' · ')||'No options'}</div>
+        </div>
+        <button class="btn btn-amber btn-sm" style="flex-shrink:0" onclick="openDropdownEditorByKey('customtablecol','${tab.id}','${c.key}')">⚙ Edit Options</button>
+      </div>`;
+    });
+    sections.push(html);
+  });
+
+  document.getElementById('table-modal-body').innerHTML = sections.length
+    ? `<div class="inf" style="margin-bottom:12px">Click ⚙ Edit Options on any field to add, remove, or rename its choices. Changes instantly update everywhere that field is used — including the matching engine.</div>
+       <div style="max-height:62vh;overflow-y:auto;padding-right:4px">${sections.join('')}</div>`
+    : '<p style="font-size:13px;color:var(--muted);padding:10px 0">No dropdown fields found.</p>';
+  document.getElementById('table-modal').classList.add('open');
+}
+
+// KEY-BASED lookup — avoids passing data through onclick attribute strings
+function openDropdownEditorByKey(type, ref, key){
+  let opts=[], label='';
+  if(type==='col'){
+    const c=COLS.find(x=>x.key===key);
+    if(!c){toast('⚠ Column not found: '+key);return;}
+    opts=[...(c.opts||[])];label=c.lbl;
+  }else if(type==='clientfield'){
+    const f=BASE_CLIENT_FIELDS.find(x=>x.key===key)||CLIENT_EXTRA_FIELDS.find(x=>x.key===key);
+    if(!f){toast('⚠ Field not found: '+key);return;}
+    opts=[...(f.opts||[])];label=f.lbl;
+  }else if(type==='customtablecol'){
+    const tab=TABS.find(t=>t.id===ref);
+    const c=tab?.cols?.find(x=>x.key===key);
+    if(!c){toast('⚠ Column not found');return;}
+    opts=[...(c.opts||[])];label=c.lbl;
+  }
+  openDropdownEditor(type,ref,key,opts,label);
+}
+
+function openColMgr(){
+  let html='';
+  COLS.forEach(c=>{
+    const isSelect=c.type==='select';
+    html+=`<div class="field-row">
+      <input type="checkbox" ${c.show?'checked':''} onchange="toggleCol('${c.key}',this.checked)">
+      ${c.sys?`<span style="flex:1;font-weight:600;font-size:12px">${esc(c.lbl)}</span>`:`<input type="text" value="${esc(c.lbl)}" onchange="renameCol('${c.key}',this.value)" style="flex:1;border:1px solid #eee;border-radius:4px;padding:3px 7px;font-size:12px">`}
+      <span style="font-size:10px;color:#aaa;min-width:50px">${c.type}</span>
+      ${isSelect?`<button class="rb rb-e" onclick="openDropdownEditorByKey('col',null,'${c.key}')">⚙ Options</button>`:''}
+      ${!c.sys?`<button class="rb rb-d" onclick="removeCol('${c.key}')">✕</button>`:'<span style="font-size:10px;color:#bbb">🔒</span>'}
+    </div>`;
+  });
+  document.getElementById('col-list').innerHTML=html;
+  document.getElementById('col-modal').classList.add('open');
+}
+function toggleCol(key,v){const c=COLS.find(x=>x.key===key);if(c){c.show=v;localStorage.setItem(SK.cols,JSON.stringify(COLS));renderProgs();}}
+function renameCol(key,v){const c=COLS.find(x=>x.key===key);if(c&&v.trim()){c.lbl=v.trim();localStorage.setItem(SK.cols,JSON.stringify(COLS));showSaveBar('Column renamed');}}
+function removeCol(key){const c=COLS.find(x=>x.key===key);if(c?.sys){toast('Cannot remove system columns');return;}COLS=COLS.filter(x=>x.key!==key);PROGS.forEach(p=>delete p[key]);saveAll('Column removed');openColMgr();renderProgs();}
+function addCustomCol(){
+  const lbl=document.getElementById('new-col-lbl').value.trim();const type=document.getElementById('new-col-type').value;
+  if(!lbl){toast('Enter a column label');return;}
+  const key='cx_'+lbl.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,20)+'_'+Date.now().toString().slice(-4);
+  COLS.push({key,lbl,type,show:true,sys:false});PROGS.forEach(p=>p[key]='');
+  document.getElementById('new-col-lbl').value='';
+  saveAll('Column added');openColMgr();renderProgs();toast('✅ Column "'+lbl+'" added');
+}
+
+// ═══════════════════════════════════════════════════════════
+// CLIENT FIELDS — dynamic field system
+// ═══════════════════════════════════════════════════════════
+function allClientFields(){return[...BASE_CLIENT_FIELDS,...CLIENT_EXTRA_FIELDS];}
+function openAddClientField(){
+  document.getElementById('field-modal-title').textContent='Add Field to Client Profile';
+  document.getElementById('field-modal-body').innerHTML=`
+    <div class="inf">New fields will appear in the Client Profile form AND will be considered in eligibility matching if you specify a matching key from the programs database.</div>
+    <div class="fg2">
+      <div class="fg full"><label>Field Label</label><input type="text" id="nf-lbl" placeholder="e.g. Provincial Ties, Work Permit Type"></div>
+      <div class="fg"><label>Data Type</label>
+        <select id="nf-type"><option value="text">Short Text</option><option value="number">Number</option><option value="select">Dropdown</option><option value="textarea">Long Text</option><option value="checkbox">Yes/No</option></select>
+      </div>
+      <div class="fg"><label>Dropdown Options (if select — comma separated)</label><input type="text" id="nf-opts" placeholder="e.g. Option1, Option2, Option3"></div>
+      <div class="fg full"><label>Match Key in Programs Table (optional — for comparison)</label>
+        <select id="nf-matchkey">
+          <option value="">— No matching —</option>
+          ${COLS.map(c=>`<option value="${c.key}">${c.lbl}</option>`).join('')}
+        </select>
+        <small style="color:var(--muted);font-size:11px">If selected, the matching engine will compare this client field to the program field when calculating eligibility.</small>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-success btn-sm" onclick="saveNewClientField()">+ Add Field</button>
+      <button class="btn btn-sec btn-sm"     onclick="closeM('field-modal')">Cancel</button>
+    </div>`;
+  document.getElementById('field-modal').classList.add('open');
+}
+function saveNewClientField(){
+  const lbl=document.getElementById('nf-lbl').value.trim();
+  const type=document.getElementById('nf-type').value;
+  const optsStr=document.getElementById('nf-opts').value;
+  const matchKey=document.getElementById('nf-matchkey').value;
+  if(!lbl){toast('⚠ Field label required');return;}
+  const key='cf_'+lbl.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,20)+'_'+Date.now().toString().slice(-4);
+  const field={key,lbl,type,required:false,matchKey:matchKey||null};
+  if(type==='select')field.opts=[''].concat(optsStr.split(',').map(s=>s.trim()).filter(Boolean));
+  CLIENT_EXTRA_FIELDS.push(field);
+  saveAll('Client field added');closeM('field-modal');
+  toast('✅ Field "'+lbl+'" added to client profile');
+}
+
+// ═══════════════════════════════════════════════════════════
+// CLIENTS
+// ═══════════════════════════════════════════════════════════
+function renderClients(){
+  const q=(document.getElementById('c-q')?.value||'').toLowerCase();
+  const sf=document.getElementById('c-sf')?.value||'';
+  const rows=CLIENTS.filter(c=>{if(sf&&c.status!==sf)return false;if(q&&!(c.name+c.occ+'').toLowerCase().includes(q))return false;return true;});
+  const stc={Active:'b-green','In Progress':'b-blue',Submitted:'b-amber',Nominated:'b-purple',Archived:'b-gray'};
+  const cl=document.getElementById('clients-list');if(!cl)return;
+  cl.innerHTML=rows.length===0?'<div class="empty">No clients yet. Click "+ New Client" to add one.</div>':
+    `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">`+
+    rows.map(c=>{
+      const init=(c.name||'C').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const myR=RESULTS.filter(r=>r.clientId===c.id);
+      return`<div class="cc" onclick="openClientDetail('${c.id}')">
+        <div class="cav">${init}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:13px">${c.name||'—'}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${c.occ||'—'} · Age ${c.age||'—'} · CLB ${c.clb||'—'}</div>
+          <div style="display:flex;gap:4px;margin-top:5px;flex-wrap:wrap">
+            <span class="badge ${stc[c.status]||'b-gray'}" style="font-size:10px">${c.status||'—'}</span>
+            ${c.prov?`<span class="badge b-blue" style="font-size:10px">${c.prov}</span>`:''}
+            ${myR.length?`<span class="badge b-gray" style="font-size:10px">${myR.length} result${myR.length>1?'s':''}</span>`:''}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+          <button class="rb rb-e" onclick="event.stopPropagation();openEditClient('${c.id}')">✏</button>
+          <button class="rb rb-d" onclick="event.stopPropagation();delClient('${c.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('')+'</div>';
+  // Populate results client filter
+  const rcf=document.getElementById('r-cf');
+  if(rcf){rcf.innerHTML='<option value="">All clients</option>';CLIENTS.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name||'Client';rcf.appendChild(o);});}
+}
+function buildClientForm(client){
+  const fields=allClientFields();
+  let html='<div class="fg2">';
+  fields.forEach(f=>{
+    const v=client&&client[f.key]!==undefined?client[f.key]:'';
+    const wide=['notes','textarea'].includes(f.type)||f.key==='notes';
+    const isSelect=f.type==='select';
+    html+=`<div class="fg ${wide?'full':''}">`;
+    html+=`<label style="display:flex;align-items:center;gap:6px">${f.lbl}${f.required?` <span style="color:var(--red)">*</span>`:''}`;
+    if(editMode&&isSelect&&f.opts){
+      html+=` <button type="button" class="rb rb-e" style="font-size:10px;padding:1px 5px" onclick="openDropdownEditorByKey('clientfield',null,'${f.key}')">⚙ Options</button>`;
+    }
+    html+=`</label>`;
+    if(f.type==='textarea')html+=`<textarea id="cf-${f.key}" rows="3">${String(v)}</textarea>`;
+    else if(f.type==='select')html+=`<select id="cf-${f.key}">${(f.opts||[]).map(o=>`<option value="${o}" ${o===v?'selected':''}>${o||'— Select —'}</option>`).join('')}</select>`;
+    else if(f.type==='checkbox')html+=`<select id="cf-${f.key}"><option value="" ${!v?'selected':''}>— Select —</option><option value="yes" ${v==='yes'?'selected':''}>Yes</option><option value="no" ${v==='no'?'selected':''}>No</option></select>`;
+    else html+=`<input type="${f.type==='number'?'number':f.type==='date'?'date':'text'}" id="cf-${f.key}" value="${v||''}" placeholder="${f.lbl}">`;
+    html+=`</div>`;
+  });
+  if(CLIENT_EXTRA_FIELDS.length>0)html+=`<div class="full" style="grid-column:1/-1"><hr class="d"><div class="sec-ttl">Additional Fields</div></div>`;
+  html+='</div>';
+  if(editMode)html+=`<div style="margin-top:10px"><button class="btn btn-amber btn-sm" onclick="openAddClientField()">+ Add Field to Profile</button></div>`;
+  return html;
+}
+function getCF(){
+  const d={};
+  allClientFields().forEach(f=>{const el=document.getElementById('cf-'+f.key);if(el)d[f.key]=f.type==='number'?parseFloat(el.value)||0:el.value;});
+  return d;
+}
+function openNewClient(){
+  _editClientId=null;
+  document.getElementById('cm-title').textContent='New Client Profile';
+  document.getElementById('del-client-btn').style.display='none';
+  document.getElementById('client-form-body').innerHTML=buildClientForm(null);
+  // Set default date
+  const dateEl=document.getElementById('cf-date');if(dateEl)dateEl.value=new Date().toISOString().split('T')[0];
+  document.getElementById('client-modal').classList.add('open');
+}
+function openEditClient(id){
+  _editClientId=id;const c=CLIENTS.find(x=>x.id===id);if(!c)return;
+  document.getElementById('cm-title').textContent='Edit: '+c.name;
+  document.getElementById('del-client-btn').style.display='inline-flex';
+  document.getElementById('client-form-body').innerHTML=buildClientForm(c);
+  document.getElementById('client-modal').classList.add('open');
+}
+function openClientDetail(id){
+  const c=CLIENTS.find(x=>x.id===id);if(!c)return;
+  const myR=RESULTS.filter(r=>r.clientId===id).sort((a,b)=>b._ts-a._ts);
+  const fields=allClientFields().filter(f=>f.key!=='notes'&&c[f.key]&&c[f.key]!=='0'&&c[f.key]!==0);
+  document.getElementById('pm-title').textContent='Client: '+c.name;
+  document.getElementById('pm-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;margin-bottom:14px">
+      ${fields.map(f=>`<div style="background:var(--bg);border-radius:5px;padding:7px 10px"><strong style="display:block;font-size:10px;color:#aaa;text-transform:uppercase">${f.lbl}</strong>${c[f.key]}</div>`).join('')}
+    </div>
+    ${c.notes?`<div style="background:#fef3e2;border-radius:7px;padding:9px 12px;font-size:12px;margin-bottom:12px">${c.notes}</div>`:''}
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#aaa;letter-spacing:.3px;margin-bottom:8px">Saved Match Results (${myR.length})</div>
+    ${myR.length===0?`<div style="color:#bbb;font-size:12px;padding:8px 0">No match results saved yet.</div>`:
+      myR.map(r=>`<div class="rc" onclick="closeM('prog-modal');showResult('${r.id}')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-weight:600;font-size:12px">Match — ${r.date||'—'}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${r.eligible||0} eligible · ${r.partial||0} partial match</div></div>
+          <button class="rb rb-d" onclick="event.stopPropagation();delResult('${r.id}')">✕</button>
+        </div>
+      </div>`).join('')}`;
+  document.getElementById('pm-actions').innerHTML=`
+    <button class="btn btn-blue btn-sm" onclick="closeM('prog-modal');runMatchForClient('${id}')">▶ Run New Match</button>
+    <button class="btn btn-amber btn-sm" onclick="closeM('prog-modal');openEditClient('${id}')">✏ Edit Profile</button>
+    <button class="btn btn-sec btn-sm" onclick="closeM('prog-modal')">Close</button>`;
+  document.getElementById('prog-modal').classList.add('open');
+}
+function saveClient(){
+  const d=getCF();if(!d.name){toast('⚠ Client name is required');return;}
+  if(_editClientId){const idx=CLIENTS.findIndex(c=>c.id===_editClientId);if(idx>=0){d.id=_editClientId;CLIENTS[idx]=d;}}
+  else{d.id='cl-'+Date.now();CLIENTS.push(d);}
+  saveAll('Client saved');closeM('client-modal');renderClients();renderDash();toast('✅ Client saved');
+}
+function saveAndMatch(){
+  const d=getCF();if(!d.name){toast('⚠ Client name is required');return;}
+  let id=_editClientId;
+  if(id){const idx=CLIENTS.findIndex(c=>c.id===id);if(idx>=0){d.id=id;CLIENTS[idx]=d;}}
+  else{d.id='cl-'+Date.now();id=d.id;CLIENTS.push(d);}
+  saveAll('Client saved');closeM('client-modal');renderClients();runMatchForClient(id);
+}
+function deleteCurrentClient(){if(_editClientId)delClient(_editClientId,true);}
+function delClient(id,fromModal=false){
+  const c=CLIENTS.find(x=>x.id===id)||{};
+  showConfirm(`Delete "${c.name||'client'}"?`,'Also deletes all match results for this client.',()=>{
+    CLIENTS=CLIENTS.filter(x=>x.id!==id);RESULTS=RESULTS.filter(r=>r.clientId!==id);
+    saveAll('Client deleted');if(fromModal)closeM('client-modal');renderClients();renderDash();toast('🗑 Client deleted');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// MATCHING ENGINE — fully dynamic, uses all client fields
+// ═══════════════════════════════════════════════════════════
+// ── Helper: normalise Yes/No/true/false values to boolean ──
+function isYes(v){if(v===true||v==='true')return true;if(typeof v==='string')return v.toLowerCase().startsWith('yes')||v==='y';return false;}
+function teerNum(v){const n=parseInt(String(v).replace(/[^0-9]/g,''));return isNaN(n)?null:n;}
+function clbNum(v){const n=parseInt(String(v).replace(/[^0-9]/g,''));return isNaN(n)?0:n;}
+
+function computeMatch(client){
+  return PROGS.map(prog=>{
+    const chk=[],gaps=[],met=[];
+
+    // Age
+    if(client.age!=null&&client.age!==''){
+      if(parseInt(client.age)>=18){chk.push(1);met.push('Age ✓');}
+      else{chk.push(0);gaps.push('Must be 18+');}
+    }
+
+    // Work Experience
+    const reqExp=parseFloat(prog.expYears)||0;
+    const hasExp=parseFloat(client.exp)||0;
+    if(hasExp>=reqExp){chk.push(1);if(reqExp>0)met.push('Experience ✓');}
+    else{chk.push(0);gaps.push(`Need ${reqExp} yr experience`);}
+
+    // TEER — client stores "TEER 2 — Technical" or just "2"
+    const progTeerText=String(prog.teerText||'');
+    if(progTeerText){
+      const progTeers=progTeerText.split(',').map(x=>parseInt(x.trim())).filter(n=>!isNaN(n));
+      const clientTeer=teerNum(client.teer);
+      if(progTeers.length>0&&clientTeer!==null){
+        if(progTeers.includes(clientTeer)){chk.push(1);met.push(`TEER ${clientTeer} ✓`);}
+        else{chk.push(0);gaps.push(`TEER ${clientTeer} not eligible (need: ${progTeerText})`);}
+      }
+    }
+
+    // CLB — client stores "CLB 7" or "7"
+    const reqCLB=parseInt(prog.clb)||0;
+    const clientCLB=clbNum(client.clb);
+    if(clientCLB>0){
+      if(clientCLB>=reqCLB){chk.push(1);met.push(`CLB ${clientCLB} ✓`);}
+      else{chk.push(0);gaps.push(`CLB: have ${clientCLB}, need ${reqCLB}`);}
+    }else{chk.push(0);gaps.push('Language test score required');}
+
+    // French NCLC
+    const reqNclc=parseInt(prog.frClb)||0;
+    const clientNclc=clbNum(client.frClb);
+    if(reqNclc>0){
+      if(clientNclc>=reqNclc){chk.push(1);met.push('French ✓');}
+      else{chk.push(0);gaps.push(`French NCLC ${reqNclc} required (have ${clientNclc||'none'})`);}
+    }
+
+    // Job Offer — prog.jobOffer is now "Yes"/"No" string or legacy boolean
+    const progNeedsJob=isYes(prog.jobOffer);
+    const progNeedsPerm=isYes(prog.jobOfferPermanent);
+    const clientJobProv=String(client.jprov||'');
+    const clientJobVal=String(client.job||'');
+    const clientHasPermJob=clientJobVal.includes('Permanent')||clientJobVal==='yes';
+    const clientHasTempJob=clientJobVal.includes('Temporary')||clientJobVal==='temp';
+    const clientHasJob=clientHasPermJob||clientHasTempJob;
+    const progJobProv=String(prog.jobOfferProvince||'');
+    if(progNeedsJob){
+      const jobOk=clientHasJob&&(!progJobProv||clientJobProv===progJobProv)&&(!progNeedsPerm||clientHasPermJob);
+      if(jobOk){chk.push(1);met.push('Job offer ✓');}
+      else{chk.push(0);gaps.push(`Job offer required${progJobProv?' in '+progJobProv:''}${progNeedsPerm?' (permanent)':''}`);}
+    }else{chk.push(1);met.push('No job offer required ✓');}
+
+    // Express Entry
+    const progNeedsEE=isYes(prog.eeRequired);
+    const clientHasEE=String(client.ee||'').includes('Yes')||client.ee==='yes';
+    if(progNeedsEE){
+      if(clientHasEE){chk.push(1);met.push('Express Entry profile ✓');}
+      else{chk.push(0);gaps.push('Active Express Entry profile required');}
+    }
+
+    // In Canada
+    const progNeedsCanada=isYes(prog.inCanadaRequired);
+    const clientInCanada=String(client.canada||'').includes('Yes')||client.canada==='yes';
+    if(progNeedsCanada&&!clientInCanada){chk.push(0);gaps.push('Must currently be living in Canada');}
+
+    // Entrepreneur checks
+    const progType=String(prog.type||'').toLowerCase();
+    const isEnt=progType.includes('entrepreneur')||progType.includes('business');
+    if(isEnt){
+      const reqNW=parseFloat(prog.networthMin)||0;
+      const reqInv=parseFloat(prog.investMin)||0;
+      const clientNW=parseFloat(client.nw)||0;
+      const clientInv=parseFloat(client.inv)||0;
+      if(reqNW>0){if(clientNW>=reqNW){chk.push(1);met.push('Net worth ✓');}else{chk.push(0);gaps.push(`Net worth: need $${reqNW.toLocaleString()} (have $${clientNW.toLocaleString()})`);}}
+      if(reqInv>0){if(clientInv>=reqInv){chk.push(1);met.push('Investment capital ✓');}else{chk.push(0);gaps.push(`Investment: need $${reqInv.toLocaleString()} (have $${clientInv.toLocaleString()})`);}}
+    }
+
+    // Province preference bonus (no penalty if no match)
+    const provPref=String(client.prov||'');
+    const preferred=provPref&&provPref!=='No preference'&&prog.province===provPref;
+
+    // Dynamic checks from custom client fields with matchKeys
+    CLIENT_EXTRA_FIELDS.forEach(f=>{
+      if(!f.matchKey)return;
+      const clientVal=client[f.key];
+      const progVal=prog[f.matchKey];
+      if(clientVal===undefined||clientVal===''||clientVal==='— Select —')return;
+      if(progVal===undefined||progVal==='')return;
+      if(f.type==='number'){
+        const cv=parseFloat(clientVal)||0;const pv=parseFloat(progVal)||0;
+        if(cv>=pv){chk.push(1);met.push(`${f.lbl} ✓`);}else{chk.push(0);gaps.push(`${f.lbl}: need ${pv}`);}
+      }else if(f.type==='select'||f.type==='text'){
+        if(String(clientVal).toLowerCase()===String(progVal).toLowerCase()||isYes(clientVal)){chk.push(1);met.push(`${f.lbl} ✓`);}
+      }
+    });
+
+    const total=chk.length,passed=chk.filter(x=>x===1).length;
+    const score=total>0?Math.round((passed/total)*100):0;
+    return{progId:prog.id,progName:prog.name,province:prog.province,type:prog.type,expressEntry:prog.expressEntry,fees:prog.fees,status:prog.status,score,gaps,met,preferred};
+  }).sort((a,b)=>(b.preferred?1:0)-(a.preferred?1:0)||b.score-a.score);
+}
+function runMatchForClient(clientId){
+  const c=CLIENTS.find(x=>x.id===clientId);if(!c)return;
+  const match=computeMatch(c);
+  const el=match.filter(r=>r.score>=80),pa=match.filter(r=>r.score>=50&&r.score<80),ne=match.filter(r=>r.score<50);
+  const rid='res-'+Date.now();
+  RESULTS.push({id:rid,clientId,clientName:c.name,date:new Date().toLocaleDateString(),_ts:Date.now(),eligible:el.length,partial:pa.length,notEligible:ne.length,results:match});
+  saveAll('Match saved');renderClients();renderDash();showResult(rid);
+  const resTab=TABS.find(t=>t.type==='results');if(resTab)showTab(resTab.id);
+  toast(`✅ Match complete — ${el.length} eligible, ${pa.length} partial`);
+}
+function showResult(id){
+  const r=RESULTS.find(x=>x.id===id);if(!r)return;
+  const match=r.results||[];
+  const el=match.filter(x=>x.score>=80),pa=match.filter(x=>x.score>=50&&x.score<80),ne=match.filter(x=>x.score<50);
+  const card=res=>{
+    const col=res.score>=80?'#27ae60':res.score>=50?'#e67e22':'#e74c3c';
+    const stBadge=res.status==='Open'?'<span class="badge b-green" style="font-size:10px">Open</span>':res.status==='Paused'?'<span class="badge b-amber" style="font-size:10px">Paused</span>':'';
+    return`<div class="rc" onclick="openDetail('${res.progId}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <div><div style="font-weight:700;font-size:12px">${res.preferred?'⭐ ':''}${res.progName||'—'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${res.province||'—'} · <span class="badge ${tc(res.type)}" style="font-size:10px">${typeLabel(res.type)}</span> ${stBadge} ${res.fees?'· '+res.fees:''}</div></div>
+        <div style="font-size:17px;font-weight:800;color:${col};min-width:44px;text-align:right">${res.score}%</div>
+      </div>
+      <div class="sbar2"><div class="sf" style="width:${res.score}%;background:${col}"></div></div>
+      <div class="gl">${(res.met||[]).slice(0,5).map(m=>`<span class="mt">${m}</span>`).join('')}${(res.gaps||[]).map(g=>`<span class="gt">✗ ${g}</span>`).join('')}</div>
+    </div>`;
+  };
+  const sub=document.getElementById('s-results');if(sub)sub.textContent=`Results for ${r.clientName||'Client'} — ${r.date} · ${el.length} eligible · ${pa.length} partial`;
+  const ra=document.getElementById('results-area');if(!ra)return;
+  ra.innerHTML=`
+    <div class="metrics" style="margin-bottom:14px">
+      <div class="metric"><div class="metric-lbl">Eligible (80%+)</div><div class="metric-val" style="color:#27ae60">${el.length}</div></div>
+      <div class="metric"><div class="metric-lbl">Partial Match (50–79%)</div><div class="metric-val" style="color:#e67e22">${pa.length}</div></div>
+      <div class="metric"><div class="metric-lbl">Not Eligible</div><div class="metric-val" style="color:#e74c3c">${ne.length}</div></div>
+      <div class="metric"><div class="metric-lbl">Total Assessed</div><div class="metric-val">${match.length}</div></div>
+    </div>
+    ${el.length?`<div style="font-weight:700;font-size:11px;color:#27ae60;text-transform:uppercase;margin-bottom:8px;letter-spacing:.3px">✓ Eligible Programs (${el.length})</div>${el.map(card).join('')}`:''}
+    ${pa.length?`<div style="font-weight:700;font-size:11px;color:#e67e22;text-transform:uppercase;margin:12px 0 8px;letter-spacing:.3px">⚡ Partial Match — Close to Qualifying (${pa.length})</div>${pa.map(card).join('')}`:''}
+    ${ne.length?`<details><summary style="cursor:pointer;font-size:12px;color:var(--muted);padding:8px 0">Show ${ne.length} not eligible programs</summary>${ne.map(card).join('')}</details>`:''}
+    <div style="margin-top:14px;background:var(--bg);border-radius:7px;padding:10px 13px;font-size:11px;color:#aaa">Preliminary assessment only. Requirements change frequently — always verify at official government sources before advising clients. This is not legal advice.</div>`;
+}
+function renderResults(){
+  const q=(document.getElementById('r-q')?.value||'').toLowerCase();
+  const cf=document.getElementById('r-cf')?.value||'';
+  const ef=document.getElementById('r-ef')?.value||'';
+  const rows=RESULTS.filter(r=>{
+    if(cf&&r.clientId!==cf)return false;
+    if(ef==='Eligible'&&(r.eligible||0)===0)return false;
+    if(ef==='Partial'&&(r.partial||0)===0)return false;
+    if(q&&!(r.clientName||'').toLowerCase().includes(q))return false;
+    return true;
+  }).sort((a,b)=>b._ts-a._ts);
+  const ra=document.getElementById('results-area');if(!ra)return;
+  if(rows.length===0){ra.innerHTML='<div class="empty">No results yet — go to Clients and run a match.</div>';return;}
+  ra.innerHTML=rows.map(r=>`
+    <div class="rc" onclick="showResult('${r.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div><div style="font-weight:700;font-size:13px">${r.clientName||'Client'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${r.date||'—'} · ${r.eligible||0} eligible · ${r.partial||0} partial</div></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="badge b-green">${r.eligible||0} eligible</span>
+          ${r.partial?`<span class="badge b-amber">${r.partial} partial</span>`:''}
+          <button class="rb rb-d" onclick="event.stopPropagation();delResult('${r.id}')">✕</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function delResult(id){showConfirm('Delete this result?','',()=>{RESULTS=RESULTS.filter(x=>x.id!==id);saveAll('Result deleted');renderResults();renderDash();toast('🗑 Result deleted');});}
+
+// ═══════════════════════════════════════════════════════════
+// CUSTOM TABLES
+// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// API KEY MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+let _apiKey = '';
+function saveApiKey(){
+  const inp = document.getElementById('api-key-input');
+  const key = (inp?.value||'').trim();
+  if(!key || !key.startsWith('sk-ant')){
+    document.getElementById('apikey-status').innerHTML = '<span style="color:var(--red)">⚠ That does not look like a valid Anthropic API key. Keys start with "sk-ant-".</span>';
+    return;
+  }
+  _apiKey = key;
+  sessionStorage.setItem('cnpnp_apikey', key);
+  document.getElementById('apikey-status').innerHTML = '<span style="color:var(--green)">✅ Key saved for this session.</span>';
+  document.getElementById('live-apikey-section').style.display = 'none';
+  document.getElementById('live-check-section').style.display = 'block';
+  // Populate the program select
+  const sel = document.getElementById('live-prog-select');
+  sel.innerHTML = '<option value="">— Select a program —</option>';
+  PROGS.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.name + ' (' + p.province + ')'; sel.appendChild(o); });
+}
+function toggleApiKeyVisibility(){
+  const inp = document.getElementById('api-key-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+function getApiKey(){
+  if(_apiKey) return _apiKey;
+  const stored = sessionStorage.getItem('cnpnp_apikey');
+  if(stored){ _apiKey = stored; return stored; }
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════════
+// LIVE UPDATE CHECK
+// ═══════════════════════════════════════════════════════════
+function openLiveUpdate(){
+  const key = getApiKey();
+  if(key){
+    document.getElementById('api-key-input').value = key;
+    document.getElementById('live-apikey-section').style.display = 'none';
+    document.getElementById('live-check-section').style.display = 'block';
+    const sel = document.getElementById('live-prog-select');
+    sel.innerHTML = '<option value="">— Select a program —</option>';
+    PROGS.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.name + ' (' + p.province + ')'; sel.appendChild(o); });
+  } else {
+    document.getElementById('live-apikey-section').style.display = 'block';
+    document.getElementById('live-check-section').style.display = 'none';
+  }
+  document.getElementById('live-result').style.display = 'none';
+  renderUpdateLog();
+  document.getElementById('live-modal').classList.add('open');
+}
+function openLiveCheckForProg(progId){
+  openLiveUpdate();
+  setTimeout(() => {
+    const sel = document.getElementById('live-prog-select');
+    if(sel) sel.value = progId;
+  }, 50);
+}
+function openLiveCheckForURL(url, name){
+  openLiveUpdate();
+  setTimeout(() => runLiveCheckURL(url, name), 100);
+}
+function renderUpdateLog(){
+  const logEl = document.getElementById('update-log'); if(!logEl) return;
+  logEl.innerHTML = UPDATE_LOG.length === 0 ? '<div style="color:#bbb;font-size:11px;padding:4px">No update checks run yet.</div>' :
+    UPDATE_LOG.slice().reverse().slice(0, 30).map(l => `<div class="upd-row">
+      <span style="color:#999;min-width:88px;flex-shrink:0">${l.date}</span>
+      <span style="flex:1">${l.program}</span>
+      <span class="badge ${l.status==='CHANGED'?'b-red':l.status==='OK'?'b-green':'b-gray'}">${l.status}</span>
+    </div>`).join('');
+}
+async function runLiveCheck(){
+  const progId = document.getElementById('live-prog-select')?.value;
+  if(!progId){ toast('⚠ Select a program first'); return; }
+  const prog = PROGS.find(p => p.id === progId); if(!prog) return;
+  if(!getApiKey()){ toast('⚠ Enter your Anthropic API key first'); return; }
+  await checkProgram(prog);
+}
+async function runLiveCheckURL(url, name){
+  if(!getApiKey()){ toast('⚠ Enter your Anthropic API key first'); return; }
+  const resultEl = document.getElementById('live-result');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--muted)"><span class="spinner"></span> Checking ${name}…</div>`;
+  const prompt = buildCheckPrompt({name, website: url, province:'', description:'', criteria:'', lastVerified:'', fees:'', processing:'', clb:'', status:''});
+  await callClaudeForUpdate(prompt, name);
+}
+async function checkAllPrograms(){
+  if(!getApiKey()){ toast('⚠ Enter your Anthropic API key first'); return; }
+  const toCheck = PROGS.filter(p => p.website).slice(0, 5);
+  if(toCheck.length === 0){ toast('No programs with official URLs saved. Add URLs in Edit Mode first.'); return; }
+  const resultEl = document.getElementById('live-result');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--muted)"><span class="spinner"></span> Checking ${toCheck.length} programs — this may take 1–2 minutes…</div>`;
+  const results = [];
+  for(const prog of toCheck){
+    const r = await checkProgramSilently(prog);
+    results.push(r);
+    logUpdate(prog.name, r.status);
+  }
+  resultEl.innerHTML = `<div class="sec-ttl">Batch Check Results (${toCheck.length} programs)</div>` +
+    results.map(r => `<div class="upd-row">
+      <span style="flex:1;font-weight:600">${r.program}</span>
+      <span class="badge ${r.status==='CHANGED'?'b-red':r.status==='OK'?'b-green':'b-gray'}">${r.status}</span>
+    </div>`).join('') +
+    `<div style="margin-top:10px;font-size:11px;color:var(--muted)">Click individual programs to see full details.</div>`;
+  saveAll('Update log saved'); renderUpdateLog();
+}
+function buildCheckPrompt(prog){
+  const today = new Date().toLocaleDateString('en-CA');
+  return `You are a Canadian immigration data analyst. Today's date is ${today}.
+
+Check the CURRENT requirements for this Provincial Nominee Program by visiting its official government website and compare to my stored data.
+
+Program: ${prog.name}
+Province: ${prog.province}
+Official Website: ${prog.website || 'Search for the official provincial government page for this program'}
+
+MY STORED DATA (may be outdated):
+- Min CLB: ${prog.clb || 'not stored'}
+- Min Work Experience: ${prog.expYears || 0} years
+- TEER Levels: ${prog.teerText || 'not stored'}
+- Job Offer Required: ${prog.jobOffer ? 'Yes' : 'No'}
+- Application Fee: ${prog.fees || 'not stored'}
+- Processing Time: ${prog.processing || 'not stored'}
+- Program Status: ${prog.status || 'not stored'}
+- Last Verified: ${prog.lastVerified || 'never'}
+- Description: ${(prog.description || '').substring(0, 200)}
+- Eligibility Criteria: ${(prog.criteria || '').substring(0, 300)}
+
+INSTRUCTIONS:
+1. Visit the official website URL above (or search for the official provincial government page)
+2. Extract ALL current requirements as of today (${today})
+3. Compare carefully to my stored data
+4. Respond in EXACTLY this format:
+
+STATUS: [CHANGED / NO CHANGES / UNABLE TO VERIFY]
+DATE CHECKED: ${today}
+
+CURRENT REQUIREMENTS (from official site):
+- Min CLB: [current]
+- Min Work Experience: [current]
+- TEER Levels: [current]
+- Job Offer Required: [Yes/No]
+- Application Fee: [current]
+- Processing Time: [current]
+- Program Status: [Open/Paused/Closed/Intake-Limited]
+
+CHANGES FROM YOUR STORED DATA:
+[List each specific change, or "None detected"]
+
+RECOMMENDED UPDATES FOR YOUR DATABASE:
+[Exact field-by-field updates to make, or "No updates needed"]
+
+OFFICIAL SOURCE VERIFIED: [exact URL checked]`;
+}
+async function checkProgram(prog){
+  const resultEl = document.getElementById('live-result');
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `<div style="padding:12px;font-size:12px;color:var(--muted)"><span class="spinner"></span> Checking <strong>${prog.name}</strong> against official sources…</div>`;
+  await callClaudeForUpdate(buildCheckPrompt(prog), prog.name, prog.id);
+}
+async function checkProgramSilently(prog){
+  try{
+    const key = getApiKey();
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 800,
+        tools: [{type: 'web_search_20250305', name: 'web_search'}],
+        messages: [{role: 'user', content: buildCheckPrompt(prog)}]
+      })
+    });
+    const data = await resp.json();
+    let text = ''; if(data.content) data.content.forEach(b => { if(b.type === 'text') text += b.text; });
+    const status = text.includes('STATUS: CHANGED') ? 'CHANGED' : text.includes('STATUS: NO CHANGES') ? 'OK' : 'UNKNOWN';
+    return {program: prog.name, status, text};
+  } catch(e) { return {program: prog.name, status: 'ERROR', text: e.message}; }
+}
+async function callClaudeForUpdate(prompt, progName, progId){
+  const resultEl = document.getElementById('live-result');
+  const key = getApiKey();
+  if(!key){
+    resultEl.innerHTML = `<div class="wrn">No API key found. Please enter your Anthropic API key above to use Live Update.</div>`;
+    return;
+  }
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 1200,
+        tools: [{type: 'web_search_20250305', name: 'web_search'}],
+        messages: [{role: 'user', content: prompt}]
+      })
+    });
+    const data = await resp.json();
+    const today = new Date().toLocaleDateString('en-CA');
+    let text = '';
+    if(data.error){
+      const errMsg = data.error.message || 'Unknown error';
+      resultEl.innerHTML = `<div class="wrn" style="white-space:pre-wrap"><strong>API Error:</strong> ${errMsg}<br><br><strong>Common fixes:</strong><br>• Make sure you copied the full API key (starts with sk-ant-api03-…)<br>• Check your key is active at console.anthropic.com<br>• Ensure your account has credits available</div>`;
+      logUpdate(progName, 'ERROR');
+      return;
+    }
+    if(data.content) data.content.forEach(b => { if(b.type === 'text') text += b.text; });
+    const status = text.includes('STATUS: CHANGED') ? 'CHANGED' : text.includes('STATUS: NO CHANGES') ? 'OK' : 'UNKNOWN';
+    logUpdate(progName, status);
+    if(progId){
+      const prog = PROGS.find(p => p.id === progId);
+      if(prog) prog.lastVerified = today;
+    }
+    saveAll('Update log saved');
+    resultEl.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+        <span class="badge ${status==='CHANGED'?'b-red':status==='OK'?'b-green':'b-gray'}" style="font-size:12px;padding:4px 10px">${status==='CHANGED'?'⚠ Changes Found':status==='OK'?'✓ No Changes':'? Unknown'}</span>
+        <span style="font-size:12px;color:var(--muted)">Checked: ${today}</span>
+      </div>
+      <div style="background:var(--bg);border-radius:7px;padding:14px;font-size:13px;line-height:1.8;white-space:pre-wrap;max-height:380px;overflow-y:auto;border:1px solid var(--border)">${text || 'No response received.'}</div>
+      ${status==='CHANGED'?`<div class="wrn" style="margin-top:10px">⚠️ Changes detected! Click "Edit Program" below to update your database with the new information.</div>`:''}
+      ${progId?`<div style="margin-top:10px;display:flex;gap:8px"><button class="btn btn-amber btn-sm" onclick="closeM('live-modal');openEditProg('${progId}')">✏ Edit Program</button><button class="btn btn-sec btn-sm" onclick="document.getElementById('live-result').style.display='none'">Clear</button></div>`:''}`;
+    renderUpdateLog();
+  } catch(e){
+    resultEl.innerHTML = `<div class="wrn"><strong>Connection error:</strong> ${e.message}<br><br>Check your internet connection and try again.</div>`;
+    logUpdate(progName, 'ERROR');
+  }
+}
+function logUpdate(program, status){
+  UPDATE_LOG.push({date: new Date().toLocaleDateString('en-CA'), program, status});
+  if(UPDATE_LOG.length > 100) UPDATE_LOG = UPDATE_LOG.slice(-100);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DROPDOWN OPTIONS EDITOR
+// Allows editing options for any select field in programs,
+// client profile, or custom tables
+// ═══════════════════════════════════════════════════════════
+let _optsTarget = null; // {type:'col'|'clientfield'|'customtablecol', ref, key}
+
+function openDropdownEditor(type, ref, key, currentOpts, label){
+  _optsTarget = {type, ref, key, currentOpts: [...currentOpts]};
+  document.getElementById('opts-modal-title').textContent = 'Edit Options — ' + label;
+  renderOptsList(currentOpts);
+  document.getElementById('opts-new-val').value = '';
+  document.getElementById('opts-modal').classList.add('open');
+}
+function renderOptsList(opts){
+  document.getElementById('opts-list').innerHTML = opts.map((o, i) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid #f5f5f0;font-size:13px">
+      <span style="flex:1">${o || '<em style="color:#bbb">— blank (placeholder) —</em>'}</span>
+      <button class="rb rb-e" onclick="editOptInline(${i})">✏</button>
+      <button class="rb rb-d" onclick="deleteOpt(${i})">✕</button>
+    </div>`).join('') || '<div style="padding:12px;color:#bbb;font-size:12px">No options yet.</div>';
+}
+function editOptInline(i){
+  const cur = _optsTarget.currentOpts[i];
+  const rows = document.getElementById('opts-list').children;
+  const row = rows[i]; if(!row) return;
+  const span = row.querySelector('span');
+  span.innerHTML = `<input type="text" value="${cur}" style="border:1.5px solid var(--blue);border-radius:5px;padding:4px 8px;font-size:13px;width:200px">`;
+  const inp = span.querySelector('input'); inp.focus(); inp.select();
+  inp.addEventListener('blur', () => { _optsTarget.currentOpts[i] = inp.value.trim()||cur; renderOptsList(_optsTarget.currentOpts); });
+  inp.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();inp.blur();} });
+}
+function deleteOpt(i){ _optsTarget.currentOpts.splice(i,1); renderOptsList(_optsTarget.currentOpts); }
+function addDropdownOption(){
+  const val = document.getElementById('opts-new-val').value.trim();
+  if(!val){ toast('⚠ Enter an option value'); return; }
+  _optsTarget.currentOpts.push(val);
+  document.getElementById('opts-new-val').value = '';
+  renderOptsList(_optsTarget.currentOpts);
+}
+function saveDropdownOptions(){
+  const {type, ref, key, currentOpts} = _optsTarget;
+  let label = key;
+  if(type === 'col'){
+    const col = COLS.find(c => c.key === key);
+    if(col){ col.opts = currentOpts; label = col.lbl; }
+  } else if(type === 'clientfield'){
+    const f = BASE_CLIENT_FIELDS.find(f => f.key === key) || CLIENT_EXTRA_FIELDS.find(f => f.key === key);
+    if(f){ f.opts = currentOpts; label = f.lbl; }
+  } else if(type === 'customtablecol'){
+    const tab = TABS.find(t => t.id === ref);
+    const col = tab?.cols?.find(c => c.key === key);
+    if(col){ col.opts = currentOpts; label = col.lbl; }
+  }
+  saveAll('Dropdown options updated');
+  closeM('opts-modal');
+  // Re-render the current view so changes appear immediately
+  const tab = TABS.find(t => t.id === _activeTabId);
+  if(tab){
+    if(tab.type==='programs'){renderProgs();}
+    else if(tab.type==='clients'){renderClients();}
+    else if(tab.type==='dashboard'){renderDash();}
+  }
+  // Also refresh the master dropdown manager if it was open (it self-closes, so reopen is manual)
+  // Notify the user clearly
+  toast(`✅ "${label}" options saved (${currentOpts.length} options) — matching engine updated`);
+  showSaveBar(`Dropdown options for "${label}" saved and applied everywhere`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// CROSS-TABLE FORMULAS FOR CUSTOM TABLES
+// ═══════════════════════════════════════════════════════════
+// Formula syntax: =COUNT(programs, "status", "Open")
+//                 =SUM(programs, "networthMin")
+//                 =LIST(programs, "province", "type", "entrepreneur")
+//                 =MATCH(clients, "prov", "Ontario")
+//                 =CALC: any JS using progs/clients/results arrays
+
+function evalCellFormula(val){
+  if(typeof val !== 'string' || !val.startsWith('=')) return val;
+  const expr = val.slice(1).trim();
+  try{
+    // Shorthand formulas
+    const countMatch = expr.match(/^COUNT\((\w+),\s*"([^"]+)",\s*"([^"]+)"\)/i);
+    if(countMatch) return String(getDataset(countMatch[1]).filter(r => r[countMatch[2]] === countMatch[3]).length);
+
+    const sumMatch = expr.match(/^SUM\((\w+),\s*"([^"]+)"\)/i);
+    if(sumMatch) return String(getDataset(sumMatch[1]).reduce((s,r)=>s+(parseFloat(r[sumMatch[2]])||0),0).toLocaleString());
+
+    const listMatch = expr.match(/^LIST\((\w+),\s*"([^"]+)"(?:,\s*"([^"]+)",\s*"([^"]+)")?\)/i);
+    if(listMatch){
+      let data = getDataset(listMatch[1]);
+      if(listMatch[3]) data = data.filter(r => r[listMatch[3]] === listMatch[4]);
+      return [...new Set(data.map(r=>r[listMatch[2]]).filter(Boolean))].join(', ');
+    }
+
+    const matchMatch = expr.match(/^MATCH\((\w+),\s*"([^"]+)",\s*"([^"]+)"\)/i);
+    if(matchMatch) return String(getDataset(matchMatch[1]).filter(r => r[matchMatch[2]] === matchMatch[3]).map(r=>r.name||r[Object.keys(r)[0]]).join(', '));
+
+    // Raw JS: CALC: expression
+    const calcMatch = expr.match(/^CALC:\s*(.+)/i);
+    if(calcMatch) return String(new Function('progs','clients','results','return '+calcMatch[1])(PROGS,CLIENTS,RESULTS));
+
+    return val; // Unknown formula, return as-is
+  } catch(e){ return '#ERR'; }
+}
+function getDataset(name){
+  const n = name.toLowerCase();
+  if(n==='programs'||n==='progs') return PROGS;
+  if(n==='clients') return CLIENTS;
+  if(n==='results') return RESULTS;
+  // Also check custom table names
+  const tab = TABS.find(t=>(t.lbl||'').toLowerCase()===n);
+  return tab?.rows||[];
+}
+
+// Override renderCustomTable to evaluate formulas
+function renderCustomTable(tab){
+  const thead = document.getElementById('cthead-'+tab.id);
+  const tbody = document.getElementById('ctbody-'+tab.id);
+  if(!thead||!tbody) return;
+  const cols = tab.cols||[], rows = tab.rows||[], em = editMode;
+
+  thead.innerHTML = `<tr>${cols.map(c=>{
+    const isSelect = c.type === 'select';
+    return `<th class="${em?'eh':''}" onclick="if(editMode)editCustomColHeader('${tab.id}','${c.key}',this)">${esc(c.lbl)}${em?'<span style="opacity:.35;font-size:9px;margin-left:3px">✏</span>':''}${em&&isSelect?`<button class="rb rb-e" style="margin-left:4px;font-size:9px" onclick="event.stopPropagation();openDropdownEditorByKey('customtablecol','${tab.id}','${c.key}')">⚙</button>`:''}`;
+  }).join('')}<th style="width:80px">Actions</th></tr>`;
+
+  tbody.innerHTML = rows.length===0
+    ? `<tr><td colspan="${cols.length+1}" style="text-align:center;padding:24px;color:#bbb">No rows yet. Click "+ Add Row" to add one.</td></tr>`
+    : rows.map(row=>`<tr>
+        ${cols.map(c=>{
+          const rawVal = row[c.key]||'';
+          const displayVal = evalCellFormula(rawVal);
+          const isFormula = typeof rawVal==='string' && rawVal.startsWith('=');
+          return `<td ${em?`onclick="customCellClick(event,'${tab.id}','${row.id}','${c.key}')"`:''}><span style="font-size:12px${isFormula?';color:var(--blue);font-weight:500':''}">${displayVal||'—'}</span></td>`;
+        }).join('')}
+        <td><div class="rbtns"><button class="rb rb-d" onclick="deleteCustomRow('${tab.id}','${row.id}')">✕</button></div></td>
+      </tr>`).join('');
+}
+
+function editCustomColHeader(tabId,key,th){
+  if(!editMode)return;
+  const tab=TABS.find(t=>t.id===tabId);const col=tab?.cols?.find(c=>c.key===key);if(!col)return;
+  const cur=col.lbl;
+  th.innerHTML=`<input type="text" value="${cur}" style="border:none;background:#fffde7;font-size:11px;font-weight:700;width:100%;padding:2px 4px;outline:none;min-width:80px">`;
+  const inp=th.querySelector('input');inp.focus();inp.select();
+  inp.addEventListener('blur',()=>{col.lbl=inp.value.trim()||cur;saveAll('Column renamed');renderCustomTable(tab);});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();inp.blur();}});
+}
+function customCellClick(e,tabId,rowId,key){
+  if(!editMode)return;
+  const tab=TABS.find(t=>t.id===tabId);if(!tab)return;
+  const row=tab.rows?.find(r=>r.id===rowId);if(!row)return;
+  const col=tab.cols?.find(c=>c.key===key);
+  const td=e.currentTarget;if(td.classList.contains('ce'))return;
+  const cur=row[key]||'';
+  td.classList.add('ce');
+  let inp;
+  if(col?.type==='select'&&col?.opts?.length){
+    inp=document.createElement('select');
+    col.opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o||'—';if(o===cur)op.selected=true;inp.appendChild(op);});
+  }else{
+    inp=document.createElement('input');inp.type='text';inp.value=cur;
+    inp.placeholder='Start with = for a formula (e.g. =COUNT(programs,"status","Open"))';
+  }
+  td.innerHTML='';td.appendChild(inp);inp.focus();
+  if(inp.type!=='select')inp.select?.();
+  inp.addEventListener('blur',()=>{row[key]=inp.value;td.classList.remove('ce');saveAll('Cell updated');renderCustomTable(tab);});
+  inp.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&inp.tagName!=='SELECT'){ev.preventDefault();inp.blur();}if(ev.key==='Escape'){td.classList.remove('ce');renderCustomTable(tab);}});
+}
+function addCustomTableRow(tabId){
+  const tab=TABS.find(t=>t.id===tabId);if(!tab)return;
+  if(!tab.rows)tab.rows=[];
+  const row={id:'r_'+Date.now()};(tab.cols||[]).forEach(c=>row[c.key]='');
+  tab.rows.push(row);saveAll('Row added');renderCustomTable(tab);
+}
+function deleteCustomRow(tabId,rowId){
+  const tab=TABS.find(t=>t.id===tabId);if(!tab)return;
+  tab.rows=(tab.rows||[]).filter(r=>r.id!==rowId);saveAll('Row deleted');renderCustomTable(tab);
+}
+function addCustomCol2(tabId){
+  const tab=TABS.find(t=>t.id===tabId);if(!tab)return;
+  const lbl=(document.getElementById('ct-col-lbl')?.value||'').trim();
+  const type=(document.getElementById('ct-col-type')?.value)||'text';
+  if(!lbl){toast('Column label required');return;}
+  const key='c_'+lbl.toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,15)+'_'+Date.now().toString().slice(-4);
+  if(!tab.cols)tab.cols=[];
+  const newCol={key,lbl,type,show:true};
+  if(type==='select')newCol.opts=['Option 1','Option 2','Option 3'];
+  tab.cols.push(newCol);
+  (tab.rows||[]).forEach(r=>r[key]='');
+  const lblEl=document.getElementById('ct-col-lbl');if(lblEl)lblEl.value='';
+  saveAll('Column added');manageCustomTableCols(tabId);renderCustomTable(tab);toast('✅ Column "'+lbl+'" added');
+}
+function removeCustomCol(tabId,key){
+  const tab=TABS.find(t=>t.id===tabId);if(!tab)return;
+  tab.cols=(tab.cols||[]).filter(c=>c.key!==key);
+  (tab.rows||[]).forEach(r=>delete r[key]);
+  saveAll('Column removed');manageCustomTableCols(tabId);renderCustomTable(tab);
+}
+
+// Update manageCustomTableCols to show select option editor
+function manageCustomTableCols(tabId){
+  const tab = TABS.find(t=>t.id===tabId); if(!tab) return;
+  document.getElementById('table-modal-title').textContent = 'Manage Columns — ' + tab.lbl;
+  const colList = (tab.cols||[]).map(c=>`
+    <div class="field-row">
+      <span style="flex:1;font-size:12px;font-weight:600">${c.lbl}</span>
+      <span style="font-size:10px;color:#aaa;min-width:50px">${c.type}</span>
+      ${c.type==='select'?`<button class="rb rb-e" onclick="openDropdownEditorByKey('customtablecol','${tabId}','${c.key}')">⚙ Options</button>`:''}
+      <button class="rb rb-d" onclick="removeCustomCol('${tabId}','${c.key}')">✕</button>
+    </div>`).join('') || '<p style="font-size:12px;color:#bbb;margin-bottom:12px">No columns yet.</p>';
+  document.getElementById('table-modal-body').innerHTML = `
+    ${colList}
+    <hr class="d">
+    <div class="sec-ttl">Add Column</div>
+    <div class="fg2" style="margin-bottom:10px">
+      <div class="fg"><label>Column Label</label><input type="text" id="ct-col-lbl" placeholder="Column name"></div>
+      <div class="fg"><label>Type</label>
+        <select id="ct-col-type">
+          <option value="text">Text</option>
+          <option value="number">Number</option>
+          <option value="select">Dropdown (Select)</option>
+          <option value="url">URL / Link</option>
+          <option value="textarea">Long Text</option>
+          <option value="formula">Formula (starts with =)</option>
+        </select>
+      </div>
+    </div>
+    <hr class="d">
+    <div class="sec-ttl">📊 Formula Reference</div>
+    <div style="background:var(--bg);border-radius:7px;padding:12px;font-size:12px;line-height:1.9">
+      Enter any of these formulas as a cell value:<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=COUNT(programs, "status", "Open")</code> — Count open programs<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=COUNT(clients, "prov", "Ontario")</code> — Count Ontario clients<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=SUM(programs, "networthMin")</code> — Sum a number field<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=LIST(programs, "province", "type", "entrepreneur")</code> — List unique values<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=MATCH(clients, "status", "Active")</code> — List matching names<br>
+      <code style="background:#fff;padding:1px 5px;border-radius:3px">=CALC: progs.filter(p=>p.fees==='No provincial fee').length</code> — Custom JS<br>
+      <span style="color:var(--muted)">Formulas appear in blue and update automatically.</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn btn-success btn-sm" onclick="addCustomCol2('${tabId}')">+ Add Column</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('table-modal')">Done</button>
+    </div>`;
+  document.getElementById('table-modal').classList.add('open');
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOGO & BRAND EDITOR
+// ═══════════════════════════════════════════════════════════
+function openLogoBrandEditor(){
+  if(!editMode)return;
+  const savedLogo=localStorage.getItem(SK.logo)||'';
+  const brandText=document.getElementById('nav-brand')?.textContent||'CANADA PNP';
+  document.getElementById('table-modal-title').textContent='⚙ Edit Logo & Brand Name';
+  document.getElementById('table-modal-body').innerHTML=`
+    <div class="sec-ttl">Brand / Tool Name</div>
+    <div class="fg" style="margin-bottom:14px">
+      <label>Name shown in nav bar</label>
+      <input type="text" id="brand-name-input" value="${esc(brandText)}" placeholder="e.g. Canada PNP Tool" style="font-size:15px;font-weight:700">
+    </div>
+    <hr class="d">
+    <div class="sec-ttl">Logo Image</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Upload a PNG, JPG, or SVG logo. It will appear in the top-left nav bar next to the brand name. Recommended height: 32px.</p>
+    ${savedLogo?`<div style="margin-bottom:12px;padding:12px;background:var(--bg);border-radius:8px;text-align:center">
+      <img src="${savedLogo}" style="max-height:48px;max-width:200px;object-fit:contain;border-radius:4px">
+      <div style="margin-top:8px"><button class="btn btn-danger btn-sm" onclick="removeLogo()">✕ Remove Logo</button></div>
+    </div>`:''}
+    <input type="file" id="logo-file-input" accept="image/*" style="font-size:12px;display:block;margin-bottom:10px">
+    <div id="logo-preview" style="display:none;margin-bottom:12px;text-align:center;padding:10px;background:var(--bg);border-radius:8px">
+      <img id="logo-preview-img" style="max-height:48px;max-width:200px;object-fit:contain">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary btn-sm" onclick="saveLogoBrand()">💾 Save Changes</button>
+      <button class="btn btn-sec btn-sm" onclick="closeM('table-modal')">Cancel</button>
+    </div>`;
+  // Wire up live preview
+  const fileInp=document.getElementById('logo-file-input');
+  fileInp.addEventListener('change',()=>{
+    const file=fileInp.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      document.getElementById('logo-preview').style.display='block';
+      document.getElementById('logo-preview-img').src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('table-modal').classList.add('open');
+}
+function saveLogoBrand(){
+  // Save brand name
+  const name=(document.getElementById('brand-name-input')?.value||'').trim()||'CANADA PNP';
+  const brandEl=document.getElementById('nav-brand');
+  if(brandEl){brandEl.textContent=name;saveHeadings();}
+  // Save logo if a file was chosen
+  const fileInp=document.getElementById('logo-file-input');
+  const file=fileInp?.files?.[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const dataUrl=e.target.result;
+      try{localStorage.setItem(SK.logo,dataUrl);applyLogo(dataUrl);}catch{toast('⚠ Logo file too large. Try a smaller image (under 200KB).');}
+    };
+    reader.readAsDataURL(file);
+  }
+  closeM('table-modal');
+  showSaveBar('Brand name and logo updated');
+  toast('✅ Brand saved');
+}
+function removeLogo(){
+  localStorage.removeItem(SK.logo);
+  applyLogo('');
+  closeM('table-modal');
+  toast('Logo removed');
+}
+function applyLogo(dataUrl){
+  const icon=document.getElementById('nav-logo-icon');
+  const img=document.getElementById('nav-logo-img');
+  if(!icon||!img)return;
+  if(dataUrl){
+    img.src=dataUrl;
+    img.style.display='block';
+    icon.style.display='none';
+  }else{
+    img.style.display='none';
+    icon.style.display='block';
+  }
+}
+function loadLogo(){
+  const saved=localStorage.getItem(SK.logo);
+  if(saved)applyLogo(saved);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DATA MANAGER
+// ═══════════════════════════════════════════════════════════
+function openDataMgr(){
+  const el=document.getElementById('pg-title-input');if(el)el.value=localStorage.getItem(SK.pgtitle)||'Canada PNP Tool';
+  document.getElementById('storage-info').innerHTML=`<strong>Programs:</strong> ${PROGS.length} · <strong>Clients:</strong> ${CLIENTS.length} · <strong>Results:</strong> ${RESULTS.length} · <strong>Custom Tabs:</strong> ${TABS.filter(t=>t.deletable).length}<br><strong>Data size:</strong> ~${Math.round(JSON.stringify({PROGS,CLIENTS,RESULTS,TABS}).length/1024)} KB`;
+  document.getElementById('data-modal').classList.add('open');
+}
+function savePageTitle(){
+  const t=(document.getElementById('pg-title-input')?.value||'').trim()||'Canada PNP Tool';
+  document.getElementById('page-title-tag').textContent=t;
+  localStorage.setItem(SK.pgtitle,t);
+  showSaveBar('Page title updated to "'+t+'"');toast('✅ Title updated');
+}
+function exportJSON(){
+  const d={progs:PROGS,cols:COLS,clients:CLIENTS,results:RESULTS,tabs:TABS,clientFields:CLIENT_EXTRA_FIELDS,metrics:CUSTOM_METRICS,updateLog:UPDATE_LOG,headings:JSON.parse(localStorage.getItem(SK.headings)||'{}'),pgtitle:localStorage.getItem(SK.pgtitle)||'',exported:new Date().toISOString()};
+  dl(JSON.stringify(d,null,2),'application/json',`canada_pnp_backup_${new Date().toISOString().split('T')[0]}.json`);
+  toast('⬇ Backup downloaded');
+}
+function exportCSV(){
+  const vc=visCols();const hdr=vc.map(c=>'"'+c.lbl+'"').join(',');
+  const rows=PROGS.map(p=>vc.map(c=>'"'+String(p[c.key]!==undefined?p[c.key]:'').replace(/"/g,'""')+'"').join(','));
+  dl([hdr,...rows].join('\n'),'text/csv',`pnp_programs_${new Date().toISOString().split('T')[0]}.csv`);
+  toast('⬇ CSV exported');
+}
+function dl(content,type,filename){
+  const b=new Blob([content],{type});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=filename;a.click();URL.revokeObjectURL(u);
+}
+function importJSON(){
+  const f=document.getElementById('imp-file').files[0];if(!f)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(d.progs&&Array.isArray(d.progs)){
+        showConfirm(`Import ${d.progs.length} programs?`,'This will REPLACE all current programs, clients, and results.',()=>{
+          PROGS=d.progs;if(d.cols)COLS=d.cols;if(d.clients)CLIENTS=d.clients;if(d.results)RESULTS=d.results;
+          if(d.tabs)TABS=d.tabs;if(d.clientFields)CLIENT_EXTRA_FIELDS=d.clientFields;
+          if(d.metrics)CUSTOM_METRICS=d.metrics;if(d.updateLog)UPDATE_LOG=d.updateLog;
+          if(d.headings){localStorage.setItem(SK.headings,JSON.stringify(d.headings));}
+          if(d.pgtitle){localStorage.setItem(SK.pgtitle,d.pgtitle);document.getElementById('page-title-tag').textContent=d.pgtitle;}
+          saveAll('Data imported');closeM('data-modal');init();toast(`✅ Imported ${PROGS.length} programs, ${CLIENTS.length} clients`);
+        });
+      }else toast('⚠ Invalid JSON format');
+    }catch{toast('⚠ Could not read file');}
+  };reader.readAsText(f);
+}
+function confirmReset(){
+  showConfirm('Reset programs to original data?','Programs will be restored to defaults. Clients and results are kept. Custom tabs, fields, and metrics are kept.',()=>{
+    PROGS=cloneDefault();COLS=JSON.parse(JSON.stringify(BASE_COLS));
+    saveAll('Programs reset');closeM('data-modal');renderTabs();showTab(_activeTabId||'dashboard');toast('↺ Programs reset to defaults');
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════
+function showConfirm(title,msg,onOk){
+  document.getElementById('conf-title').textContent=title;document.getElementById('conf-msg').textContent=msg;
+  document.getElementById('conf-ok').onclick=()=>{closeM('conf-modal');onOk();};
+  document.getElementById('conf-modal').classList.add('open');
+}
+function showSaveBar(msg){document.getElementById('save-msg').textContent=msg||'Saved';document.getElementById('savebar').classList.add('on');setTimeout(()=>document.getElementById('savebar').classList.remove('on'),4500);}
+function toast(msg,dur=2600){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),dur);}
+document.querySelectorAll('.mbg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m&&m.id!=='conf-modal')m.classList.remove('open');}));
+
+// ═══════════════════════════════════════════════════════════
+// DEFAULT PROGRAM DATA — 50 programs (no hardcoded "verified" dates)
+// lastVerified is set dynamically via Live Update checks
+// ═══════════════════════════════════════════════════════════
+function cloneDefault(){return JSON.parse(JSON.stringify(DEFAULT_PROGS));}
+const DEFAULT_PROGS=[
+{id:'bc-sw',name:'BC PNP – Skills Immigration: Skilled Worker',province:'British Columbia',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'British Columbia',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fundsAmt:0,fees:'CAD $1,475',processing:'2–3 mo (ROI) + 3–5 mo (nomination)',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Skills-Immigration/Skilled-Worker',description:'For experienced foreign workers with a full-time, indeterminate job offer from a registered BC employer in a NOC TEER 0, 1, 2, or 3 occupation. Uses a competitive registration score system.',criteria:'Age: 18+\nEducation: Relevant to offered position\nExperience: Min 2 years related work experience\nLanguage: CLB 4+\nJob Offer: Full-time indeterminate from BC PNP-registered employer (TEER 0/1/2/3)',docs:'Job offer letter, Proof of work experience (2 yrs), Educational credentials/ECA, Language test results (IELTS/CELPIP), Identity documents',notes:'Competitive registration score system — cut-off varies by draw. Employer must be BC PNP-registered. Use Live Update to check current cut-off scores and any rule changes.',lastVerified:''},
+{id:'bc-ig',name:'BC PNP – Skills Immigration: International Graduate',province:'British Columbia',type:'Graduate',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'British Columbia',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,475',processing:'2–3 mo + 3–5 mo',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Skills-Immigration/International-Graduate',description:'For recent graduates of eligible BC post-secondary institutions with a full-time BC job offer in TEER 0–3. No minimum work experience required.',criteria:'Education: Graduated from eligible BC post-secondary (min 2-year program)\nLanguage: CLB 4+\nJob Offer: Full-time indeterminate in TEER 0/1/2/3 from BC PNP-registered employer',docs:'BC transcript and credential, Job offer letter, Language test results, Identity documents',notes:'Degree must be from eligible BC institution, min 2 years. Job offer must relate to field of study.',lastVerified:''},
+{id:'bc-eebc',name:'BC PNP – Express Entry BC: Skilled Worker',province:'British Columbia',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:2,teerText:'0,1,2',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,475',processing:'Periodic draws — nomination within 1–2 mo',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Express-Entry-BC',description:'Express Entry–linked stream for skilled workers with a valid IRCC Express Entry profile and a BC connection. Nomination adds 600 CRS points.',criteria:'Education: Bachelor\'s degree or higher\nExperience: 2 years TEER 0/1/2 in past 5 years\nLanguage: CLB 7+\nBC Connection: Current work in BC, family in BC, or previous study/work in BC',docs:'IRCC EE profile + Job Seeker Validation Code, BC connection proof, Language test results, Identity documents',notes:'BC connection is critical. Must demonstrate clear intent to live in BC. Nomination adds 600 CRS points.',lastVerified:''},
+{id:'bc-eels',name:'BC PNP – Skills Immigration: Entry Level & Semi-Skilled',province:'British Columbia',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'British Columbia',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $1,475',processing:'3–6 months',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Skills-Immigration/Entry-Level-and-Semi-Skilled',description:'For workers in specific semi-skilled occupations: tourism/hospitality, food processing, long-haul trucking, food service supervisors.',criteria:'Currently working in BC in eligible occupation\nLanguage: CLB 4+\nJob Offer: Full-time indeterminate in eligible TEER 4/5 NOC',notes:'RESTRICTED to specific NOC codes only. Must currently be working in BC. Use Live Update to verify current eligible NOC list.',lastVerified:''},
+{id:'bc-ent-base',name:'BC PNP – Entrepreneur Immigration: Base Camp',province:'British Columbia',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:600000,investMin:200000,fees:'CAD $3,500',processing:'18–24 months (two-stage)',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Entrepreneur-Immigration',description:'Two-stage entrepreneur program for experienced businesspeople establishing or purchasing a BC business.',criteria:'Experience: Min 3 years business ownership or senior management\nLanguage: CLB 4+\nNet Worth: Min CAD $600,000\nInvestment: Min $200,000 (Metro Van) or $100,000 (outside Metro Van)\nOwnership: Min 33.3% equity\nJobs: Must create 1 FT job for Canadian/PR',notes:'TWO-STAGE PROCESS. Business exploration visit strongly recommended before applying.',lastVerified:''},
+{id:'bc-ent-reg',name:'BC PNP – Entrepreneur Immigration: Regional Pilot',province:'British Columbia',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:300000,investMin:100000,fees:'CAD $3,500',processing:'18–24 months (two-stage)',website:'https://www.welcomebc.ca/Immigrate-to-B-C/B-C-Provincial-Nominee-Program/Entrepreneur-Immigration/Regional-Pilot',description:'Lower thresholds for entrepreneurs committing to a DESIGNATED rural/regional BC community.',criteria:'Experience: Min 3 years business ownership or management\nLanguage: CLB 4+\nNet Worth: Min $300,000; Investment: Min $100,000 in regional community\nOwnership: Min 33.3% equity; Create 1 FT job',notes:'Business must be in a DESIGNATED REGIONAL COMMUNITY — check BC PNP website for current eligible communities.',lastVerified:''},
+{id:'ab-aos',name:'Alberta AAIP – Alberta Opportunity Stream',province:'Alberta',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:1,teerText:'2,3,4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Alberta',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $500',processing:'3–6 months',website:'https://www.alberta.ca/alberta-advantage-immigration-program',description:'For TFWs currently working in Alberta with a full-time permanent job offer in TEER 2–5.',criteria:'Experience: 12 continuous months in Alberta in same/similar occupation\nLanguage: CLB 5+ (TEER 2–3); CLB 4+ (TEER 4–5)\nJob Offer: Full-time permanent in Alberta in eligible NOC',notes:'Must be currently living and working in Alberta. Check AAIP website for excluded occupations and eligible NOC list.',lastVerified:''},
+{id:'ab-ees',name:'Alberta AAIP – Express Entry Stream',province:'Alberta',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $500',processing:'6–12 months total',website:'https://www.alberta.ca/alberta-advantage-immigration-program',description:'Express Entry–linked. Alberta searches EE pool for candidates with Alberta connections. Nomination adds 600 CRS points.',criteria:'Experience: 1 year TEER 0/1/2/3 in past 5 years\nLanguage: CLB 7+\nAlberta Connection: Work history / job offer / family in Alberta',notes:'Alberta targets specific occupations. Alberta connection required.',lastVerified:''},
+{id:'ab-fge',name:'Alberta AAIP – Foreign Graduate Entrepreneur',province:'Alberta',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:0,teerText:'',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:10000,fees:'CAD $500',processing:'6–12 months',website:'https://www.alberta.ca/alberta-advantage-immigration-program',description:'For recent Alberta post-secondary graduates starting a business in Alberta within 9 months of graduation.',criteria:'Education: Graduate of eligible Alberta post-secondary (min 2-year, within past 18 months)\nLanguage: CLB 5+\nOwnership: >50% and actively managing',notes:'Business must be registered in Alberta within 9 months of graduation.',lastVerified:''},
+{id:'ab-rrs',name:'Alberta AAIP – Rural Renewal Stream',province:'Alberta',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:1,teerText:'2,3,4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Alberta',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $500',processing:'3–6 months',website:'https://www.alberta.ca/rural-renewal-stream',description:'For workers with a job offer in a designated rural Alberta community.',criteria:'Experience: 1 year in the offered occupation in the last 5 years\nLanguage: CLB 4+\nJob Offer: Full-time permanent in a designated rural Alberta community',notes:'Only designated rural communities qualify — check AAIP website for current list.',lastVerified:''},
+{id:'sk-ee',name:'Saskatchewan SINP – Express Entry',province:'Saskatchewan',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fundsAmt:10000,fees:'CAD $350',processing:'6–12 months total',website:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/international-skilled-worker/express-entry',description:'Express Entry–linked. Min 60 SINP points required. Saskatchewan connection needed (job offer, SK education, or in-demand occupation).',criteria:'Experience: 1 year TEER 0/1/2/3 in last 10 years\nLanguage: CLB 7+\nSK Connection: SK job offer OR degree from SK post-secondary OR in-demand occupation',notes:'MINIMUM 60 SINP POINTS required.',lastVerified:''},
+{id:'sk-oid',name:'Saskatchewan SINP – Occupations In-Demand',province:'Saskatchewan',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fundsAmt:10000,fees:'CAD $350',processing:'3–6 months',website:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/international-skilled-worker/occupations-in-demand',description:'For workers in in-demand occupations. Job offer not required if on SINP Occupations In-Demand list. Min 60 SINP points required.',criteria:'Occupation: Must be on SINP Occupations In-Demand list\nExperience: 1 year in last 10 years\nLanguage: CLB 4+',notes:'MINIMUM 60 SINP POINTS required. Verify occupation on current SINP list before applying.',lastVerified:''},
+{id:'sk-exp',name:'Saskatchewan SINP – Saskatchewan Experience Category',province:'Saskatchewan',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'0,1,2,3,4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Saskatchewan',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $350',processing:'3–6 months',website:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/saskatchewan-experience-category',description:'For workers currently in Saskatchewan with a permanent full-time job offer. Covers TEER 0–5.',criteria:'Experience: Min 6 months FT in SK in offered occupation\nLanguage: CLB 4+ (TEER 4–5); CLB 6+ (TEER 2–3); CLB 7+ (TEER 0–1)\nJob Offer: Full-time permanent from SK employer',notes:'Must be currently legally working in SK. Language requirements vary by TEER level.',lastVerified:''},
+{id:'sk-ent',name:'Saskatchewan SINP – Entrepreneur Category',province:'Saskatchewan',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:500000,investMin:300000,fees:'CAD $1,750',processing:'12–24 months (two-stage)',website:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/business-category/entrepreneur',description:'MANDATORY business exploration visit required. Work permit → performance agreement → nomination.',criteria:'Experience: Min 3 years business ownership or senior management\nLanguage: CLB 4+\nNet Worth: Min $500,000\nInvestment: $300,000 (Regina/Saskatoon) or $200,000 (other SK)\nOwnership: Min 33.3% equity; Min 2 FT jobs',notes:'MANDATORY business exploration visit to Saskatchewan required before application.',lastVerified:''},
+{id:'sk-farm',name:'Saskatchewan SINP – Farm Owner & Operator',province:'Saskatchewan',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:500000,investMin:500000,fees:'CAD $1,750',processing:'12–24 months (two-stage)',website:'https://www.saskatchewan.ca/residents/moving-to-saskatchewan/live-in-saskatchewan/by-immigrating/saskatchewan-immigrant-nominee-program/business-category/farm-owner-operator',description:'For experienced farmers purchasing and operating a farm in Saskatchewan.',criteria:'Experience: Min 3 years full-time farm ownership or management\nLanguage: CLB 4+\nNet Worth: Min $500,000; Farm Investment: Min $500,000 in Saskatchewan farm',notes:'Applicant must have genuine farming experience — not just investment capital. Farm exploration visit required.',lastVerified:''},
+{id:'mb-swm',name:'Manitoba MPNP – Skilled Workers in Manitoba',province:'Manitoba',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'0,1,2,3,4',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Manitoba',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $500',processing:'3–6 months',website:'https://www.immigratemanitoba.com/immigrate-to-manitoba/skilled-workers/skilled-workers-in-manitoba/',description:'For TFWs currently in Manitoba with a permanent job offer from their Manitoba employer. Min 60 MPNP points required.',criteria:'Experience: Min 6 months continuous in MB for nominating employer\nLanguage: CLB 4+ (TEER 3–4); CLB 5–7+ (TEER 0–2)\nJob Offer: Full-time permanent from Manitoba employer',notes:'Must currently be working in Manitoba. Min 60 MPNP points required.',lastVerified:''},
+{id:'mb-swo',name:'Manitoba MPNP – Skilled Workers Overseas',province:'Manitoba',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Manitoba',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fundsAmt:15000,fees:'CAD $500',processing:'6–12 months',website:'https://www.immigratemanitoba.com/immigrate-to-manitoba/skilled-workers/skilled-workers-overseas/',description:'For skilled workers abroad with a Manitoba connection and job offer. Min 60 MPNP points required.',criteria:'Education: Post-secondary diploma or degree\nExperience: Min 2 years relevant\nLanguage: CLB 5+ (TEER 2–3); CLB 7+ (TEER 0–1)\nMB Connection: Family in MB / previous MB study or work\nJob Offer: Full-time permanent MB job offer',notes:'Manitoba connection required. Min 60 MPNP points required.',lastVerified:''},
+{id:'mb-ies',name:'Manitoba MPNP – International Education Stream',province:'Manitoba',type:'Graduate',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:0,teerText:'0,1,2,3,4',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fundsAmt:10000,fees:'CAD $500',processing:'3–6 months',website:'https://www.immigratemanitoba.com/immigrate-to-manitoba/international-education-stream/',description:'For recent Manitoba post-secondary graduates. Career Employment pathway requires FT permanent MB job offer in NOC TEER 0–3.',criteria:'Education: Graduated from Manitoba post-secondary (2+ year program)\nLanguage: CLB 7+ (Career Employment); CLB 5 (other pathways)',notes:'Must have studied at least 2 academic years in Manitoba.',lastVerified:''},
+{id:'mb-bis',name:'Manitoba MPNP – Business Investor: Entrepreneur Pathway',province:'Manitoba',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:500000,investMin:250000,fees:'CAD $2,000',processing:'18–24 months (two-stage)',website:'https://www.immigratemanitoba.com/immigrate-to-manitoba/business/',description:'Two-stage entrepreneur program. Applicant receives Letter of Advice to Apply (LAF) based on MPNP points.',criteria:'Experience: Min 3 years business ownership or senior management\nLanguage: CLB 5+\nNet Worth: Min $500,000\nInvestment: $250,000 (Winnipeg) or $150,000 (rural MB)\nOwnership: Min 33.3% equity; Min 1 FT job for MB resident',notes:'Must receive Letter of Advice to Apply (LAF) based on MPNP points.',lastVerified:''},
+{id:'on-hcp',name:'Ontario OINP – Human Capital Priorities Stream',province:'Ontario',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,500',processing:'30–60 days after NOI',website:'https://www.ontario.ca/page/oinp-express-entry-human-capital-priorities-stream',description:'Express Entry–linked. Ontario sends NOIs to EE pool candidates in NOC TEER 0/1/2/3. Cannot apply directly. Nomination adds 600 CRS points.',criteria:'Education: Bachelor\'s degree or higher\nExperience: 1 year TEER 0/1/2/3 in last 5 years\nLanguage: CLB 7+',notes:'CANNOT APPLY DIRECTLY — Ontario sends NOI from EE pool. Nomination adds 600 CRS points.',lastVerified:''},
+{id:'on-sts',name:'Ontario OINP – Skilled Trades Stream',province:'Ontario',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:5,frClb:0,expYears:2,teerText:'2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Ontario',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,500',processing:'30–60 days after NOI',website:'https://www.ontario.ca/page/oinp-express-entry-skilled-trades-stream',description:'Express Entry–linked for skilled trades workers. Ontario Certificate of Qualification and Ontario job offer required.',criteria:'Education: Secondary + trade certification or Ontario apprenticeship\nExperience: 2 years in the skilled trade in last 5 years\nLanguage: CLB 5+\nJob Offer: Full-time permanent Ontario job offer in eligible TEER 2/3 trade',notes:'Must have or be eligible for an Ontario Certificate of Qualification.',lastVerified:''},
+{id:'on-fssw',name:'Ontario OINP – French-Speaking Skilled Worker',province:'Ontario',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:7,expYears:1,teerText:'0,1,2,3',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,500',processing:'30–60 days after NOI',website:'https://www.ontario.ca/page/oinp-express-entry-french-speaking-skilled-worker-stream',description:'Express Entry–linked for French-speaking skilled workers. CLB 7+ English AND NCLC 7+ French required.',criteria:'Education: Bachelor\'s degree or higher\nExperience: 1 year TEER 0/1/2/3 in last 5 years\nLanguage: CLB 7+ English AND NCLC 7+ French',notes:'Both English (IELTS/CELPIP) and French (TEF/TCF) tests must be within 2 years of application.',lastVerified:''},
+{id:'on-mg',name:'Ontario OINP – Masters Graduate Stream',province:'Ontario',type:'Graduate',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:0,teerText:'0,1,2,3',eduMin:'master',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fundsAmt:11475,fees:'CAD $1,500',processing:'Periodic EOI draws',website:'https://www.ontario.ca/page/oinp-masters-graduate-stream',description:'For recent Ontario master\'s degree graduates. No job offer required. EOI draw system.',criteria:'Education: Completed (or within 2 years of completing) an Ontario master\'s degree (min 1 year FT study)\nLanguage: CLB 7+\nFunds: Min CAD $11,475 single applicant',notes:'Must have studied at least 1 year in Ontario. Must have graduated within 2 years prior to application.',lastVerified:''},
+{id:'on-phd',name:'Ontario OINP – PhD Graduate Stream',province:'Ontario',type:'Graduate',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:0,teerText:'0,1,2,3',eduMin:'phd',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fundsAmt:11475,fees:'CAD $1,500',processing:'Periodic EOI draws',website:'https://www.ontario.ca/page/oinp-phd-graduate-stream',description:'For PhD graduates of eligible Ontario universities. Must apply within 2 years of graduation.',criteria:'Education: Completed (or enrolled in) a PhD at eligible Ontario university\nLanguage: CLB 7+\nFunds: Min CAD $11,475 single applicant',notes:'Must be currently enrolled or have graduated within 2 years.',lastVerified:''},
+{id:'on-ejo',name:'Ontario OINP – Employer Job Offer: International Skilled Worker',province:'Ontario',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'bachelor',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Ontario',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $1,500',processing:'90–120 business days',website:'https://www.ontario.ca/page/oinp-employer-job-offer-international-skilled-worker-stream',description:'For skilled workers abroad with a permanent full-time Ontario job offer. No EE profile required.',criteria:'Education: Post-secondary diploma or degree\nExperience: 2 years in offered occupation\nLanguage: CLB 7+\nJob Offer: Full-time permanent Ontario job offer in TEER 0/1/2/3',notes:'Employer must be a genuine Ontario business in good standing.',lastVerified:''},
+{id:'on-corp',name:'Ontario OINP – Corporate Stream',province:'Ontario',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:3,teerText:'',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:1000000,fees:'CAD $3,000',processing:'6–12 months',website:'https://www.ontario.ca/page/oinp-corporate-stream',description:'FOR ESTABLISHED INTERNATIONAL COMPANIES EXPANDING TO ONTARIO — not individual entrepreneurs. Company must have CAD $5M+ revenues and create min 5 FT permanent jobs.',criteria:'Company: CAD $5M+ revenues; must invest in Ontario; create min 5 FT jobs\nExperience: Min 3 years senior management\nLanguage: CLB 7+',notes:'For international companies expanding to Ontario — not individual entrepreneurs.',lastVerified:''},
+{id:'qc-rsw',name:'Quebec Regular Skilled Worker Program (QSWP)',province:'Quebec',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:7,expYears:0,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fundsAmt:3000,fees:'CAD $861',processing:'12–30 months',website:'https://www.immigration.quebec.ca/en/immigrate-install/workers/',description:'Points-based Grille de sélection. Min 50 pts (single) / 57 pts (with dependants). FRENCH is the single most important factor.',criteria:'Language: NCLC 7+ French strongly preferred; English adds points\nJob Offer: Validated QC job offer adds 10 significant points',notes:'POINTS-BASED: Min 50 pts single / 57 pts with dependants. After receiving CSQ, apply federally for PR.',lastVerified:''},
+{id:'qc-peq',name:'Quebec Experience Program (PEQ)',province:'Quebec',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:6,frClb:7,expYears:0,teerText:'0,1,2,3,4',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $861',processing:'3–6 months',website:'https://www.immigration.quebec.ca/en/immigrate-install/workers/peq-program/',description:'Simplified Quebec immigration for TFWs in Quebec and recent Quebec international graduates. NCLC 7 oral French MANDATORY.',criteria:'Worker pathway: 12 months FT work in Quebec in NOC TEER 0–3 in last 24 months\nLanguage: NCLC 7 French oral (speaking AND listening) IS MANDATORY',notes:'NCLC 7 FRENCH ORAL IS MANDATORY — NO EXCEPTIONS. Fastest Quebec route.',lastVerified:''},
+{id:'qc-ent',name:'Quebec Entrepreneur Program',province:'Quebec',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:5,expYears:2,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:300000,investMin:200000,fees:'CAD $1,166',processing:'12–24 months',website:'https://www.immigration.quebec.ca/en/immigrate-install/businesspeople/start-business/',description:'Points-based selection for entrepreneurs in Quebec. French proficiency significantly increases score.',criteria:'Experience: Min 2–3 years business ownership in last 5 years\nLanguage: French NCLC 5+ strongly preferred\nNet Worth: Min ~$300,000; Investment: Min $200,000\nOwnership: Min 25% equity; Min 3 FT jobs',notes:'Check MIDI website for current intake periods. French increases score significantly.',lastVerified:''},
+{id:'qc-se',name:'Quebec Self-Employed Worker Program',province:'Quebec',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:5,expYears:2,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:100000,investMin:0,fees:'CAD $1,166',processing:'12–24 months',website:'https://www.immigration.quebec.ca/en/immigrate-install/businesspeople/self-employed/',description:'For workers creating their own employment in Quebec (artists, craftspeople, professionals). Points-based grid.',criteria:'Experience: Min 2 years self-employment in last 5 years\nLanguage: French NCLC 5+ strongly preferred',notes:'Points-based grid applies. Must demonstrate viable self-employment activity plan in Quebec.',lastVerified:''},
+{id:'ns-lmp',name:'Nova Scotia NSNP – Labour Market Priorities',province:'Nova Scotia',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $75',processing:'30 days after NOI',website:'https://novascotiaimmigration.com/move-here/nova-scotia-nominee-program/labour-market-priorities/',description:'Invite-only EE-linked. NS sends NOIs from EE pool. Lowest application fee in Canada ($75). Nomination adds 600 CRS points.',criteria:'Experience: 1 year TEER 0/1/2/3 in last 5 years\nLanguage: CLB 7+\nActive EE profile required',notes:'CANNOT APPLY DIRECTLY — NS sends the NOI.',lastVerified:''},
+{id:'ns-sw',name:'Nova Scotia NSNP – Skilled Worker Stream',province:'Nova Scotia',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Nova Scotia',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $75',processing:'3–6 months',website:'https://novascotiaimmigration.com/move-here/nova-scotia-nominee-program/skilled-worker/',description:'For skilled workers with a full-time permanent job offer from a Nova Scotia employer in NOC TEER 0/1/2/3.',criteria:'Experience: 1 year relevant in last 5 years\nLanguage: CLB 5+\nJob Offer: Full-time permanent in TEER 0/1/2/3 from NS employer',notes:'One of the lowest fees in Canada ($75).',lastVerified:''},
+{id:'ns-inn',name:'Nova Scotia NSNP – Innovation Stream',province:'Nova Scotia',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:7,frClb:0,expYears:2,teerText:'',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:50000,investMin:50000,fees:'CAD $75',processing:'6–12 months',website:'https://novascotiaimmigration.com/',description:'For entrepreneurs/key employees of innovative startups endorsed by a designated NS Innovation Endorsement Organization.',criteria:'Experience: Min 2 years relevant work or entrepreneurial experience\nLanguage: CLB 7+\nMust receive endorsement from designated NS Innovation Organization',notes:'Must first secure ENDORSEMENT from a designated NS Innovation Organization.',lastVerified:''},
+{id:'nb-eelm',name:'New Brunswick NBPNP – Express Entry Labour Market',province:'New Brunswick',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'New Brunswick',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $250',processing:'6–12 months',website:'https://www.welcomenb.ca/content/wel-bien/en/immigrating/content/immigration-programs/provincial-nominee-program.html',description:'Express Entry–linked for skilled workers with NB job offer and active EE profile.',criteria:'Experience: 1 year TEER 0/1/2/3\nLanguage: CLB 7+\nJob Offer: Full-time permanent from NB employer required',notes:'NB connection and intent to live in NB required. Nomination adds 600 CRS points.',lastVerified:''},
+{id:'nb-swes',name:'New Brunswick NBPNP – Skilled Workers with Employer Support',province:'New Brunswick',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:1,teerText:'0,1,2,3,4',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'New Brunswick',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $250',processing:'3–6 months',website:'https://www.welcomenb.ca/content/wel-bien/en/immigrating/content/immigration-programs/provincial-nominee-program.html',description:'For skilled workers with a permanent full-time NB job offer. No Express Entry required.',criteria:'Experience: 1 year relevant\nLanguage: CLB 4+ (CLB 7 for TEER 0–1)\nJob Offer: Full-time permanent NB job offer',notes:'Employer must show prior Canadian recruitment attempts.',lastVerified:''},
+{id:'nb-ent',name:'New Brunswick NBPNP – Entrepreneurial Stream',province:'New Brunswick',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:5,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:300000,investMin:150000,fees:'CAD $250',processing:'12–18 months',website:'https://www.welcomenb.ca/content/wel-bien/en/immigrating/content/immigration-programs/provincial-nominee-program.html',description:'Must submit EOI first. Must own min 50% of the NB business and actively manage it.',criteria:'Experience: Min 3 years business ownership\nLanguage: CLB 5+\nNet Worth: Min $300,000; Investment: Min $150,000 in NB\nOwnership: Min 50% equity; Min 1 FT job for NB resident',notes:'Must submit Expression of Interest (EOI) first.',lastVerified:''},
+{id:'pei-sw',name:'PEI PNP – Labour Impact: Skilled Worker',province:'Prince Edward Island',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:6,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Prince Edward Island',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $350',processing:'3–6 months',website:'https://www.princeedwardisland.ca/en/topic/pei-provincial-nominee-program',description:'For skilled workers abroad with a PEI job offer in NOC TEER 0/1/2/3.',criteria:'Education: Post-secondary diploma or degree\nExperience: 2 years relevant in last 5 years\nLanguage: CLB 6+\nJob Offer: Full-time permanent in TEER 0/1/2/3 from PEI employer',notes:'PEI employer must demonstrate prior Canadian recruitment.',lastVerified:''},
+{id:'pei-ee',name:'PEI PNP – Express Entry Stream',province:'Prince Edward Island',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'bachelor',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $350',processing:'6–12 months',website:'https://www.princeedwardisland.ca/en/topic/pei-provincial-nominee-program',description:'Express Entry–linked for skilled workers with active EE profile and PEI connection.',criteria:'Experience: 1 year TEER 0–3\nLanguage: CLB 7+\nPEI Connection: previous study/work in PEI, family in PEI, or PEI job offer required',notes:'PEI connection required. Nomination adds 600 CRS points.',lastVerified:''},
+{id:'pei-biz',name:'PEI PNP – Business Impact Stream',province:'Prince Edward Island',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:600000,investMin:150000,fees:'CAD $350',processing:'18–24 months (two-stage)',website:'https://www.princeedwardisland.ca/en/topic/pei-provincial-nominee-program',description:'Two-stage entrepreneur program for PEI.',criteria:'Experience: Min 3 years business ownership\nLanguage: CLB 4+\nNet Worth: Min $600,000; Investment: Min $150,000 in PEI\nOwnership: Min 33.3% equity; Min 1 FT job',notes:'Business exploration visit to PEI strongly recommended.',lastVerified:''},
+{id:'nl-sw',name:'NL NLPNP – Skilled Worker Category',province:'Newfoundland and Labrador',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Newfoundland and Labrador',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'CAD $250',processing:'3–6 months',website:'https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/',description:'For skilled workers abroad with a full-time permanent NL job offer in TEER 0/1/2/3.',criteria:'Experience: 1 year relevant\nLanguage: CLB 4+\nJob Offer: Full-time permanent in TEER 0/1/2/3 from NL employer',notes:'Labour shortages in healthcare, skilled trades, technology, and ocean industries.',lastVerified:''},
+{id:'nl-ig',name:'NL NLPNP – International Graduate Category',province:'Newfoundland and Labrador',type:'Graduate',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'No',jobOfferProvince:'Newfoundland and Labrador',eeRequired:'No',inCanadaRequired:'Yes',networthMin:0,investMin:0,fees:'CAD $250',processing:'3–6 months',website:'https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/',description:'For recent NL post-secondary graduates with a job offer from an NL employer.',criteria:'Education: Graduated from NL post-secondary institution\nLanguage: CLB 4+\nJob Offer: Job offer in NL related to field of study',notes:'Must have studied at least one academic year in NL.',lastVerified:''},
+{id:'nl-ent',name:'NL NLPNP – International Entrepreneur',province:'Newfoundland and Labrador',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:500000,investMin:200000,fees:'CAD $250',processing:'12–24 months',website:'https://www.gov.nl.ca/immigration/immigrating-to-newfoundland-and-labrador/provincial-nominee-program/',description:'For businesspeople establishing or acquiring a business in NL.',criteria:'Experience: Min 3 years business ownership\nLanguage: CLB 4+\nNet Worth: Min $500,000; Investment: Min $200,000 in NL\nOwnership: Min 33.3% equity; Min 1 FT job',notes:'Priority: fisheries, ocean tech, tourism, mining, oil/gas sectors.',lastVerified:''},
+{id:'nwt-sw',name:'NWT NTNP – Skilled Worker Stream',province:'Northwest Territories',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Northwest Territories',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'No provincial fee',processing:'3–6 months',website:'https://www.immigratenwt.ca/en/ntnp-skilled-worker',description:'For skilled workers with a full-time permanent NWT job offer in TEER 0/1/2/3. No provincial fee.',criteria:'Experience: 2 years relevant\nLanguage: CLB 4+\nJob Offer: Full-time permanent from registered NWT employer',notes:'No provincial fee. Significantly higher cost of living than southern Canada.',lastVerified:''},
+{id:'nwt-cr',name:'NWT NTNP – Critical Impact Worker',province:'Northwest Territories',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Northwest Territories',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'No provincial fee',processing:'3–6 months',website:'https://www.immigratenwt.ca/en/ntnp-critical-impact-worker',description:'For semi-skilled workers in critical NWT occupations (TEER 4–5) with a permanent NWT job offer.',criteria:'Language: CLB 4+\nJob Offer: Full-time permanent in eligible TEER 4/5 occupation from NWT employer',notes:'Only specific critical TEER 4–5 NOC codes eligible. Check NTNP website.',lastVerified:''},
+{id:'nwt-biz',name:'NWT NTNP – Business Nominee Stream',province:'Northwest Territories',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:250000,investMin:150000,fees:'No provincial fee',processing:'12–18 months',website:'https://www.immigratenwt.ca/en/ntnp-business-nominee',description:'For businesspeople establishing or acquiring a business in NWT. Lower thresholds than southern provinces. No provincial fee.',criteria:'Experience: Min 3 years business ownership\nLanguage: CLB 4+\nNet Worth: Min $250,000; Investment: Min $150,000 in NWT\nOwnership: Majority ownership; Min 1 FT job',notes:'No provincial fee. Must demonstrate commitment to living and working in NWT.',lastVerified:''},
+{id:'yt-sw',name:'Yukon YNP – Skilled Worker',province:'Yukon',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:2,teerText:'0,1,2,3',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Yukon',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'No provincial fee',processing:'3–6 months',website:'https://yukon.ca/en/yukon-nominee-program',description:'For skilled workers with a full-time permanent Yukon job offer in TEER 0/1/2/3. No provincial fee.',criteria:'Experience: 2 years relevant\nLanguage: CLB 4+\nJob Offer: Full-time permanent in TEER 0/1/2/3 from Yukon employer',notes:'No provincial fee.',lastVerified:''},
+{id:'yt-ciw',name:'Yukon YNP – Critical Impact Worker',province:'Yukon',type:'Skilled Worker',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:0,teerText:'4,5',eduMin:'secondary',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Yukon',eeRequired:'No',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'No provincial fee',processing:'3–6 months',website:'https://yukon.ca/en/yukon-nominee-program',description:'For semi-skilled workers in specific critical Yukon occupations (TEER 4–5) with a permanent Yukon job offer.',criteria:'Language: CLB 4+\nJob Offer: Full-time permanent in critical TEER 4/5 occupation from Yukon employer',notes:'No provincial fee. Only specific TEER 4–5 NOC codes eligible.',lastVerified:''},
+{id:'yt-ee',name:'Yukon YNP – Express Entry',province:'Yukon',type:'Skilled Worker',status:'Open',expressEntry:'Yes',clb:7,frClb:0,expYears:1,teerText:'0,1,2,3',eduMin:'diploma2',jobOffer:'Yes',jobOfferPermanent:'Yes',jobOfferProvince:'Yukon',eeRequired:'Yes',inCanadaRequired:'No',networthMin:0,investMin:0,fees:'No provincial fee',processing:'6–12 months',website:'https://yukon.ca/en/yukon-nominee-program',description:'Express Entry–linked. Both active EE profile AND Yukon job offer required. No provincial fee.',criteria:'Experience: 1 year TEER 0–3\nLanguage: CLB 7+\nYukon job offer required; Active EE profile required',notes:'No provincial fee. Nomination adds 600 CRS points.',lastVerified:''},
+{id:'yt-biz',name:'Yukon YNP – Business Nominee Program',province:'Yukon',type:'Entrepreneur / Business',status:'Open',expressEntry:'No',clb:4,frClb:0,expYears:3,teerText:'',eduMin:'secondary',jobOffer:'No',jobOfferPermanent:'No',jobOfferProvince:'',eeRequired:'No',inCanadaRequired:'No',networthMin:500000,investMin:300000,fees:'No provincial fee',processing:'18–24 months (two-stage)',website:'https://yukon.ca/en/yukon-nominee-program',description:'Two-stage entrepreneur program for Yukon. No provincial fee.',criteria:'Experience: Min 3 years business ownership\nLanguage: CLB 4+\nNet Worth: Min $500,000; Investment: $300,000 (Whitehorse) or $150,000 (outside Whitehorse)\nOwnership: Majority stake; Min 1 FT job',notes:'No provincial fee. TWO-STAGE PROCESS. Performance agreement must be met before nomination.',lastVerified:''},
+];
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function init(){
+  loadAll();
+  _activeTabId=TABS[0]?.id||'dashboard';
+  renderTabs();
+  loadHeadings();
+  loadLogo();
+  if(!localStorage.getItem(SK.progs)){
+    setTimeout(()=>toast('💡 Turn on Edit Mode to edit anything — cells, headings, dropdowns, banners, and logo.',5000),800);
+  }
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
